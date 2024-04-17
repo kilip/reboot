@@ -1,0 +1,82 @@
+---
+version: "3"
+
+tasks:
+  default: task -l  
+
+  boot:prod:
+    desc: boot docker container
+    cmds:
+      - docker compose -f compose.yaml -f compose.prod.yaml up -d
+
+  up:
+    desc: boot docker container
+    cmds:
+      - docker compose up -d
+
+  start:
+    desc: start docker container
+    cmds:
+      - docker compose up -d
+
+  stop:
+    desc: stop docker container
+    cmds:
+      - docker compose stop
+  
+  rm:
+    desc: cleanup containers
+    cmds:
+      - docker compose rm
+
+  build:
+    desc: build dev container
+    cmds:
+      - task: build:php
+      - task: build:pwa
+
+  build:pwa:
+    desc: Build pwa container image
+    cmds:
+      - docker compose build pwa
+      
+  build:php:
+    desc: Build php container image
+    cmds:
+      - docker compose build api
+
+  build:prod:
+    desc: Build production images
+    cmds:
+      - docker compose -f compose.yaml -f compose.prod.yaml build
+
+  logs:api:
+    desc: show api container log
+    cmds:
+      - docker compose logs -f api --tail 10
+
+  logs:pwa:
+    desc: show pwa container log
+    cmds:
+      - docker compose logs -f pwa --tail 10
+
+  api:shell:
+    desc: execute bash shell in api container
+    cmds:
+      - docker compose exec api bash
+  
+  sf:
+    desc: execute bin/console command in api container
+    cmds:
+      - docker compose exec api bin/console {{.CLI_ARGS}}
+  
+  sf:cc:
+    desc: clear symfony cache
+    cmds:
+      - docker compose exec api bin/console cache:clear {{.CLI_ARGS}}
+
+  composer:
+    desc: execute composer in api container
+    cmds:
+      - docker compose exec api composer {{.CLI_ARGS}}
+

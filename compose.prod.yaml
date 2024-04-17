@@ -1,0 +1,15 @@
+---
+services:  
+  api:
+    image: ${API_DOCKER_IMAGE}
+    build:
+      context: ./api
+      target: frankenphp_prod
+    environment:
+      PWA_UPSTREAM: pwa:3000
+
+  pwa:
+    image: ${PWA_DOCKER_IMAGE}
+    build:
+      context: ./pwa
+      target: prod

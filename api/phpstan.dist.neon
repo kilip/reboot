@@ -1,0 +1,16 @@
+parameters:
+    level: 6
+    paths:
+        - bin/
+        - config/
+        - public/
+        - src/
+        - tests/
+    symfony:
+        containerXmlPath: var/cache/dev/Reboot_KernelDevDebugContainer.xml
+        constantHassers: false
+    scanDirectories:
+        - var/cache/dev/Symfony/Config
+    bootstrapFiles:
+        - vendor/autoload.php
+        - src/Kernel.php

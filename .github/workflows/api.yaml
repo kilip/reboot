@@ -1,0 +1,129 @@
+name: API Tests
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: ./api
+
+jobs:
+  phpstan:
+    name: 'PHPStan'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        php:
+          - '8.3'
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: pecl, composer
+          extensions: intl, bcmath, curl, openssl, mbstring, mongodb
+          coverage: none
+          ini-values: memory_limit=-1
+
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Update project dependencies
+        run: |
+          composer install --no-interaction --no-progress --ansi
+
+      - name: Cache PHPStan results
+        uses: actions/cache@v4
+        with:
+          path: /tmp/phpstan
+          key: phpstan-php${{ matrix.php }}-${{ github.sha }}
+          restore-keys: |
+            phpstan-php${{ matrix.php }}-
+            phpstan-
+        continue-on-error: true
+
+      - name: Run PHPStan analysis
+        run: |
+          ./vendor/bin/phpstan --version
+          ./vendor/bin/phpstan analyse --no-interaction --no-progress --ansi
+
+  phpunit:
+    name: PHPUnit (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        php:
+          - '8.2'
+          - '8.3'
+        include:
+          - php: '8.2'
+            coverage: true
+          - php: '8.3'
+            coverage: true
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: pecl, composer
+          extensions: intl, bcmath, curl, openssl, mbstring, pdo_sqlite, mongodb
+          coverage: pcov
+          ini-values: memory_limit=-1
+
+      - name: Get composer cache directory
+        id: composercache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composercache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Update project dependencies
+        run: composer update --no-interaction --no-progress --ansi
+
+      - name: Clear test app cache
+        run: bin/console cache:clear --ansi
+
+      - name: Run PHPUnit tests
+        run: bin/phpunit --coverage-text --log-junit build/logs/phpunit/junit.xml ${{ matrix.coverage && '--coverage-clover build/logs/phpunit/clover.xml' || '' }}
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phpunit-logs-php${{ matrix.php }}
+          path: api/build/logs
+        continue-on-error: true
+
+      - name: Upload coverage results to Codecov
+        if: matrix.coverage
+        uses: codecov/codecov-action@v4
+        with:
+          directory: api/build/logs/phpunit
+          name: phpunit-php${{ matrix.php }}
+          flags: phpunit
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+        continue-on-error: true

@@ -1,0 +1,32 @@
+security:
+  providers:
+    users_in_memory: { memory: null }
+    users:
+      id: Reboot\Security\Core\UserProvider
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+    main:
+      #lazy: true
+      provider: users 
+  
+  access_control:
+    - { path: ^/docs, roles: PUBLIC_ACCESS }
+    - { path: ^/, roles: ROLE_USER }
+
+when@prod: &prod
+  security:
+    firewalls:
+      main:
+        access_token:
+          token_handler:
+            oidc_user_info: '%env(resolve:OIDC_USER_INFO_URL)%'
+
+when@dev: *prod
+
+when@test:
+  security:
+    firewalls:
+      main:
+
