@@ -23,6 +23,10 @@ tasks:
     desc: stop docker container
     cmds:
       - docker compose stop {{.CLI_ARGS}}
+
+  restart:
+    desc: restart docker container
+    cmd: docker compose restart {{.CLI_ARGS}}
   
   rm:
     desc: cleanup containers
@@ -38,12 +42,12 @@ tasks:
   build:pwa:
     desc: Build pwa container image
     cmds:
-      - docker compose build pwa
+      - docker compose build pwa {{.CLI_ARGS}}
       
   build:php:
     desc: Build php container image
     cmds:
-      - docker compose build api
+      - docker compose build api {{.CLI_ARGS}}
 
   build:prod:
     desc: Build production images
@@ -84,3 +88,8 @@ tasks:
     desc: execute pnpm in pwa container
     cmds: 
       - docker compose exec pwa pnpm {{.CLI_ARGS}}
+
+  secrets:
+    desc: generate random secrets
+    cmds:
+      - openssl rand -base64 -hex 32

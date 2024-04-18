@@ -31,8 +31,9 @@ services:
     image: ${IMAGE_PREFIX}-pwa
     build:
       context: ./pwa
-        - .env
-        - .env.local
+    env_file:
+      - .env
+      - .env.local
 
 volumes:
   caddy_config:
