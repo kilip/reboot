@@ -1,12 +1,22 @@
 <?php
 
+/*
+ * This file is part of the reboot project.
+ *
+ * (c) Anthonius Munthi <me@itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Reboot\Tests\Security\Core;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Reboot\Contracts\UserInterface;
 use Reboot\Contracts\UserRepositoryInterface;
 use Reboot\Security\Core\UserProvider;
-use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 class UserProviderTest extends TestCase
 {
@@ -69,7 +79,37 @@ class UserProviderTest extends TestCase
         $newUser->expects($this->once())
             ->method('setName')
             ->with($name = 'Some Name');
+        $newUser->expects($this->once())
+            ->method('setEmail')
+            ->with($email);
+        $newUser->expects($this->once())
+            ->method('setRoles')
+            ->with($roles = ['ROLE_USER', 'ROLE_ADMIN']);
 
-        $sut->loadUserByIdentifier($email, ['name' => $name, 'email' => $email]);
+        $attributes = [
+            'name' => $name,
+            'email' => $email,
+            'groups' => ['Admin', 'Group Admin'],
+        ];
+        $sut->loadUserByIdentifier($email, $attributes);
+    }
+
+    public function testThrowExceptionOnInvalidAttributtes(): void
+    {
+        $users = $this->users;
+        $newUser = $this->user;
+        $sut = $this->sut;
+
+        $users->expects($this->once())
+            ->method('findByEmail')
+            ->with($email = 'email')
+            ->willReturn($newUser);
+
+        $attributes = [
+            'email' => $email,
+        ];
+        $this->expectException(UnsupportedUserException::class);
+
+        $sut->loadUserByIdentifier($email, $attributes);
     }
 }

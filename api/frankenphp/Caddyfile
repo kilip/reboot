@@ -77,7 +77,7 @@
 			)
 		)
 		|| path('/favicon.ico', '/manifest.json', '/robots.txt', '/sitemap*')
-		|| path('/@id*', '/app*', '/node_modules/*', '/@vite*', '/assets*')
+		|| path('/@id*', '/app*', '/node_modules/*', '/@vite*', '/assets*', "/:root*")
 		|| query({'_rsc': '*'})`
 
 	# Comment the following line if you don't want Next.js to catch requests for HTML documents.

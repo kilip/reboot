@@ -12,22 +12,22 @@ tasks:
   up:
     desc: boot docker container
     cmds:
-      - docker compose up -d
+      - docker compose up -d {{.CLI_ARGS}}
 
   start:
     desc: start docker container
     cmds:
-      - docker compose up -d
+      - docker compose up -d {{.CLI_ARGS}}
 
   stop:
     desc: stop docker container
     cmds:
-      - docker compose stop
+      - docker compose stop {{.CLI_ARGS}}
   
   rm:
     desc: cleanup containers
     cmds:
-      - docker compose rm
+      - docker compose rm {{.CLI_ARGS}}
 
   build:
     desc: build dev container
@@ -80,3 +80,7 @@ tasks:
     cmds:
       - docker compose exec api composer {{.CLI_ARGS}}
 
+  pnpm:
+    desc: execute pnpm in pwa container
+    cmds: 
+      - docker compose exec pwa pnpm {{.CLI_ARGS}}

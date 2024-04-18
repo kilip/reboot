@@ -23,6 +23,9 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Create .env.local file
+        run: touch .env.local
+
       - name: Build Docker images
         uses: docker/bake-action@v4
         with:
@@ -49,7 +52,7 @@ jobs:
           date_tag=$(date +'%Y%m%d%H%M%S')
           API_IMAGE=${IMAGE_PREFIX}-api
           PWA_IMAGE=${IMAGE_PREFIX}-pwa
-          
+
           echo "API_DATE=${API_IMAGE}:main-${date_tag}" >> "$GITHUB_OUTPUT"
           echo "PWA_DATE=${PWA_IMAGE}:main-${date_tag}" >> "$GITHUB_OUTPUT"
 
@@ -77,7 +80,7 @@ jobs:
         run: |
           docker tag $API_DOCKER_IMAGE ${{ steps.tag.outputs.API_DATE }}
           docker push ${{ steps.tag.outputs.API_DATE }}
-          
+
           docker tag $PWA_DOCKER_IMAGE ${{ steps.tag.outputs.PWA_DATE }}
           docker push ${{ steps.tag.outputs.PWA_DATE }}
 
@@ -89,8 +92,3 @@ jobs:
 
           docker tag $PWA_DOCKER_IMAGE ${{ steps.tag.outputs.PWA_LATEST}}
           docker push ${{ steps.tag.outputs.PWA_LATEST }}
-
-          
-          
-
-  
