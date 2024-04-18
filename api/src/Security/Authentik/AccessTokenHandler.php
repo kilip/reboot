@@ -39,9 +39,6 @@ class AccessTokenHandler implements AccessTokenHandlerInterface
         #[Autowire('%env(OIDC_CONFIGURATION_URL)%')]
         private readonly string $oidcConfigurationUrl,
 
-        #[Autowire('%env(OIDC_JWKS_URL)%')]
-        private readonly string $oidcJwksUrl,
-
         private readonly HttpClientInterface $securityAuthorizationClient,
         private readonly LoggerInterface $logger,
         private readonly string $claim = 'email',

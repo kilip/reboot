@@ -10,8 +10,8 @@ security:
     main:
       #lazy: true
       provider: users 
-      stateless: true
-  
+      stateless: false
+      
   access_control:
     - { path: ^/docs, roles: PUBLIC_ACCESS }
     - { path: ^/_profiler, roles: PUBLIC_ACCESS }

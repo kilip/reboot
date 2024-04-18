@@ -8,8 +8,8 @@ jose:
     loaders:
       oidc:
         serializers: ['jws_compact']
-        signature_algorithms: ['HS256', 'RS256', 'ES256']
-        header_checkers: ['alg']
+        signature_algorithms: ['RS256']
+        header_checkers: [ 'alg']
         is_public: true
 
 services:
@@ -19,7 +19,7 @@ services:
   
   Jose\Component\Checker\AlgorithmChecker:
     arguments:
-      $supportedAlgorithms: ['HS256', 'RS256', 'ES256']
+      $supportedAlgorithms: ['RS256']
     tags:
       - name: 'jose.checker.header'
         alias: 'alg'

@@ -26,6 +26,7 @@ RUN set -eux; \
 		pcntl \
 		redis \
         pcov \
+		bcmath \
 	;
 
 COPY --link frankenphp/conf.d/app.ini $PHP_INI_DIR/conf.d/

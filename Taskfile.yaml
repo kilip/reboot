@@ -2,7 +2,7 @@
 version: "3"
 
 tasks:
-  default: task -l  
+  default: task -l
 
   boot:prod:
     desc: boot docker container
@@ -26,8 +26,10 @@ tasks:
 
   restart:
     desc: restart docker container
-    cmd: docker compose restart {{.CLI_ARGS}}
-  
+    cmds:
+      - task: stop
+      - task: start
+
   rm:
     desc: cleanup containers
     cmds:
@@ -43,7 +45,7 @@ tasks:
     desc: Build pwa container image
     cmds:
       - docker compose build pwa {{.CLI_ARGS}}
-      
+
   build:php:
     desc: Build php container image
     cmds:
@@ -68,12 +70,12 @@ tasks:
     desc: execute bash shell in api container
     cmds:
       - docker compose exec api bash
-  
+
   sf:
     desc: execute bin/console command in api container
     cmds:
       - docker compose exec api bin/console {{.CLI_ARGS}}
-  
+
   sf:cc:
     desc: clear symfony cache
     cmds:
@@ -86,7 +88,7 @@ tasks:
 
   pnpm:
     desc: execute pnpm in pwa container
-    cmds: 
+    cmds:
       - docker compose exec pwa pnpm {{.CLI_ARGS}}
 
   secrets:
