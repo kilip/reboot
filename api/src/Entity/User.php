@@ -46,6 +46,9 @@ class User implements UserInterface
         return $this->id;
     }
 
+    /**
+     * @param array<int,string> $roles
+     */
     public function setRoles(array $roles): UserInterface
     {
         $this->roles = $roles;
@@ -53,6 +56,9 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * @return array<int,string>
+     */
     public function getRoles(): array
     {
         if (!in_array('ROLE_USER', $this->roles)) {

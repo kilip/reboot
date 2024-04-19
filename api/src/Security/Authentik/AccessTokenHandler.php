@@ -60,7 +60,6 @@ class AccessTokenHandler implements AccessTokenHandlerInterface
                 signature: $signature,
             );
             $claims = json_decode($jws->getPayload(), true);
-            $this->logger->notice('claims', $claims);
             if (empty($claims[$this->claim])) {
                 throw new MissingClaimException(sprintf('"%s" claim not found.', $this->claim));
             }
@@ -69,7 +68,7 @@ class AccessTokenHandler implements AccessTokenHandlerInterface
                 $claims[$this->claim],
                 new FallbackUserLoader(fn () => $this->createUser($claims)), $claims);
         } catch (\Throwable $e) {
-            $this->logger?->error('An error occurred while decoding and validating the token.', [
+            $this->logger->error('An error occurred while decoding and validating the token.', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
@@ -102,6 +101,9 @@ class AccessTokenHandler implements AccessTokenHandlerInterface
         }
     }
 
+    /**
+     * @param array<string,mixed> $oidcConfiguration
+     */
     private function createKeyset(array $oidcConfiguration): JWKSet
     {
         try {
@@ -111,8 +113,6 @@ class AccessTokenHandler implements AccessTokenHandlerInterface
                 $keys = array_filter($response->toArray()['keys'], static fn (array $key) => 'sig' === $key['use']);
                 return json_encode(['keys' => $keys]);
             });
-
-            $this->logger->notice('keyset', json_decode($cache, true));
             return JWKSet::createFromJson($cache);
         } catch (\Throwable $e) {
             $this->logger->error('An error occurred while requesting OIDC certs.', [
