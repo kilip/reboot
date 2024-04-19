@@ -35,7 +35,7 @@ class RebootHandlerTest extends TestCase
             ->willReturn($node);
 
         $sshFactory->expects($this->once())
-            ->method('create')
+            ->method('createSshClient')
             ->with($node)
             ->willReturn($ssh);
 

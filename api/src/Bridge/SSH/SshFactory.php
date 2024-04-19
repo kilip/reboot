@@ -16,6 +16,7 @@ use phpseclib3\Crypt\PublicKeyLoader;
 use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Contracts\SshFactoryInterface;
 use Reboot\Contracts\SshInterface;
+use Reboot\Tests\Bridge\Network\SftpInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mercure\HubInterface;
 
@@ -32,11 +33,24 @@ final readonly class SshFactory implements SshFactoryInterface
     ) {
     }
 
-    public function create(NodeInterface $node): SshInterface
+    public function createSshClient(NodeInterface $node): SshInterface
     {
         $key = $this->loadKey($node->getSshPrivateKey() ?? $this->defaultPrivateKey);
 
         return new SSH(
+            host: $node->getIpAddress(),
+            username: $node->getSshUser() ?? $this->defaultUser,
+            privateKey: $key,
+            mercureHub: $this->mercureHub,
+            port: $node->getSshPort() ?? 22
+        );
+    }
+
+    public function createSftpClient(NodeInterface $node): SftpInterface
+    {
+        $key = $this->loadKey($node->getSshPrivateKey() ?? $this->defaultPrivateKey);
+
+        return new SFTP(
             host: $node->getIpAddress(),
             username: $node->getSshUser() ?? $this->defaultUser,
             privateKey: $key,

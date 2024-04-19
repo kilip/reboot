@@ -23,6 +23,7 @@ use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Controller\Node\PowerOffAction;
 use Reboot\Controller\Node\RebootAction;
 use Reboot\Controller\Node\WakeOnLanAction;
+use Reboot\Controller\ScanNodesAction;
 use Reboot\Enum\NodeTypeEnum;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
@@ -61,7 +62,14 @@ use Symfony\Component\Uid\Uuid;
             security: "is_granted('ROLE_ADMIN')",
             name: 'reboot'
         ),
-    ]
+        new GetCollection(
+            uriTemplate: '/nodes/scan',
+            controller: ScanNodesAction::class,
+            security: "is_granted('ROLE_ADMIN')",
+            name: 'scan-nodes'
+        ),
+    ],
+    mercure: true
 )]
 #[ORM\Entity]
 class Node implements NodeInterface
@@ -78,8 +86,8 @@ class Node implements NodeInterface
     #[ORM\Column(type: 'string', unique: true)]
     private string $ipAddress;
 
-    #[ORM\Column(type: 'string', length: 20)]
-    private string $macAddress;
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
+    private ?string $macAddress = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $online = false;
@@ -112,6 +120,7 @@ class Node implements NodeInterface
     public function setHostname(string $hostname): Node
     {
         $this->hostname = $hostname;
+
         return $this;
     }
 
@@ -123,17 +132,19 @@ class Node implements NodeInterface
     public function setIpAddress(string $ipAddress): Node
     {
         $this->ipAddress = $ipAddress;
+
         return $this;
     }
 
-    public function getMacAddress(): string
+    public function getMacAddress(): ?string
     {
         return $this->macAddress;
     }
 
-    public function setMacAddress(string $macAddress): Node
+    public function setMacAddress(?string $macAddress): Node
     {
         $this->macAddress = $macAddress;
+
         return $this;
     }
 
@@ -145,6 +156,7 @@ class Node implements NodeInterface
     public function setOnline(bool $online): Node
     {
         $this->online = $online;
+
         return $this;
     }
 
@@ -156,6 +168,7 @@ class Node implements NodeInterface
     public function setSshPrivateKey(?string $sshPrivateKey): Node
     {
         $this->sshPrivateKey = $sshPrivateKey;
+
         return $this;
     }
 
@@ -167,6 +180,7 @@ class Node implements NodeInterface
     public function setSshUser(?string $sshUser): Node
     {
         $this->sshUser = $sshUser;
+
         return $this;
     }
 
@@ -178,6 +192,7 @@ class Node implements NodeInterface
     public function setSshPort(?int $sshPort): Node
     {
         $this->sshPort = $sshPort;
+
         return $this;
     }
 
@@ -189,6 +204,7 @@ class Node implements NodeInterface
     public function setType(NodeTypeEnum $type): Node
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -200,6 +216,7 @@ class Node implements NodeInterface
     public function setDraft(bool $draft): Node
     {
         $this->draft = $draft;
+
         return $this;
     }
 }

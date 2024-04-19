@@ -45,7 +45,7 @@ class WakeOnLanHandlerTest extends TestCase
             ->willReturn($mac = 'aa:bb:cc:dd:ee:ff');
 
         $sshFactory->expects($this->once())
-            ->method('create')
+            ->method('createSshClient')
             ->with($node)
             ->willReturn($ssh);
 

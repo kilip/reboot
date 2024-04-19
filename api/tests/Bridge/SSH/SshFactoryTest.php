@@ -40,7 +40,7 @@ class SshFactoryTest extends TestCase
             ->method('getSshPort')
             ->willReturn(null);
 
-        $ssh = $factory->create($node);
+        $ssh = $factory->createSshClient($node);
 
         $this->assertInstanceOf(SSH::class, $ssh);
     }

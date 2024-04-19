@@ -29,7 +29,7 @@ final readonly class PowerOffHandler
         $node = $this->nodeRepository
             ->findById($command->getNodeId());
         $ssh = $this->sshFactory
-            ->create($node);
+            ->createSshClient($node);
 
         $ssh->addCommand('sudo poweroff');
         $ssh->execute();

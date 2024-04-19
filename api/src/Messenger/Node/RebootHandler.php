@@ -27,7 +27,7 @@ final readonly class RebootHandler
     public function __invoke(RebootCommand $command): void
     {
         $node = $this->nodeRepository->findById($command->getNodeId());
-        $ssh = $this->sshFactory->create($node);
+        $ssh = $this->sshFactory->createSshClient($node);
 
         $ssh->addCommand('sudo reboot');
         $ssh->execute();

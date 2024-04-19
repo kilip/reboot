@@ -22,6 +22,11 @@ final class SSH implements SshInterface
     private string $currentCommand = '';
 
     /**
+     * @var array<int, string>
+     */
+    private array $outputs = [];
+
+    /**
      * @param array<int, string> $commands
      */
     public function __construct(
@@ -89,5 +94,15 @@ final class SSH implements SshInterface
         );
 
         $this->mercureHub->publish($update);
+
+        $this->outputs[] = $output;
+    }
+
+    /**
+     * @return array<int,string>
+     */
+    public function getOutputs(): array
+    {
+        return $this->outputs;
     }
 }

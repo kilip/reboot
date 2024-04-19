@@ -17,7 +17,7 @@ interface NodeInterface
 {
     public function getId(): ?Uuid;
 
-    public function getMacAddress(): string;
+    public function getMacAddress(): ?string;
 
     public function getIpAddress(): string;
 

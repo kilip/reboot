@@ -12,8 +12,11 @@
 namespace Reboot\Contracts;
 
 use Reboot\Contracts\Entity\NodeInterface;
+use Reboot\Tests\Bridge\Network\SftpInterface;
 
 interface SshFactoryInterface
 {
-    public function create(NodeInterface $node): SshInterface;
+    public function createSshClient(NodeInterface $node): SshInterface;
+
+    public function createSftpClient(NodeInterface $node): SftpInterface;
 }
