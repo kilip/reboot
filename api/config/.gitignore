@@ -1,2 +1,5 @@
 ssh/*
 !ssh/.gitkeep
+
+reboot/*
+!reboot/.gitkeep
