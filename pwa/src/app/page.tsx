@@ -1,5 +1,5 @@
 "use client";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 export default function Home() {
   const handleLogin = () => {
@@ -9,8 +9,6 @@ export default function Home() {
     });
   };
 
-  const { data: session, status } = useSession();
-  console.log(session?.accessToken);
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="flex-row items-center justify-between">

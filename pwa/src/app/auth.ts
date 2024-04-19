@@ -1,4 +1,4 @@
-import { config } from "@/util/config";
+import { config } from "../util/config";
 import { type Session as DefaultSession, TokenSet, User } from "next-auth";
 import NextAuth from "next-auth/next";
 import AuthentikProvider from "next-auth/providers/authentik";
