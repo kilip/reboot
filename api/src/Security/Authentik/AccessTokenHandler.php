@@ -90,6 +90,7 @@ class AccessTokenHandler implements AccessTokenHandlerInterface
                 return $response->getContent();
             });
             $this->logger->notice('oidc configuration', json_decode($cache, true));
+
             return json_decode($cache, true, 512, \JSON_THROW_ON_ERROR);
         } catch (\Throwable $e) {
             $this->logger->error('An error occurred while requesting OIDC configuration.', [
@@ -111,8 +112,10 @@ class AccessTokenHandler implements AccessTokenHandlerInterface
                 $item->expiresAfter($this->ttl);
                 $response = $this->securityAuthorizationClient->request('GET', $oidcConfiguration['jwks_uri']);
                 $keys = array_filter($response->toArray()['keys'], static fn (array $key) => 'sig' === $key['use']);
+
                 return json_encode(['keys' => $keys]);
             });
+
             return JWKSet::createFromJson($cache);
         } catch (\Throwable $e) {
             $this->logger->error('An error occurred while requesting OIDC certs.', [

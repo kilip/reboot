@@ -95,3 +95,9 @@ tasks:
     desc: generate random secrets
     cmds:
       - openssl rand -base64 -hex 32
+
+  pass:init:
+    desc: generate secrets from password store
+    cmds:
+      - pass reboot/ssh-private-key > api/config/ssh/reboot
+      - pass reboot/ssh-public-key > api/config/ssh/reboot.pub

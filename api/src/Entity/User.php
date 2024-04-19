@@ -13,7 +13,7 @@ namespace Reboot\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
-use Reboot\Contracts\UserInterface;
+use Reboot\Contracts\Entity\UserInterface;
 use Reboot\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;

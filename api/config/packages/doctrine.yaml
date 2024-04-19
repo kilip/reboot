@@ -25,7 +25,8 @@ doctrine:
     controller_resolver:
       auto_mapping: true
     resolve_target_entities:
-      Reboot\Contracts\UserInterface: Reboot\Entity\User
+      Reboot\Contracts\Entity\UserInterface: Reboot\Entity\User
+      Reboot\Contracts\Entity\NodeInterface: Reboot\Entity\Node
 
 when@test:
   doctrine:

@@ -19,6 +19,7 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
 		wakeonlan \
+    	ssh-client \
 	;
 
 RUN set -eux; \

@@ -13,8 +13,8 @@ namespace Reboot\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Reboot\Contracts\UserInterface;
-use Reboot\Contracts\UserRepositoryInterface;
+use Reboot\Contracts\Entity\UserInterface;
+use Reboot\Contracts\Entity\UserRepositoryInterface;
 use Reboot\Entity\User;
 use Symfony\Component\DependencyInjection\Attribute\AsAlias;
 

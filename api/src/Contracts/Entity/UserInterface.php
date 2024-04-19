@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Reboot\Contracts;
+namespace Reboot\Contracts\Entity;
 
 use Symfony\Component\Security\Core\User\UserInterface as SymfonyUser;
 
@@ -19,5 +19,8 @@ interface UserInterface extends SymfonyUser
 
     public function setName(string $name): self;
 
+    /**
+     * @param array<int,string> $roles
+     */
     public function setRoles(array $roles): self;
 }

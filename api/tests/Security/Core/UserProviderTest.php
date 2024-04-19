@@ -13,8 +13,8 @@ namespace Reboot\Tests\Security\Core;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Reboot\Contracts\UserInterface;
-use Reboot\Contracts\UserRepositoryInterface;
+use Reboot\Contracts\Entity\UserInterface;
+use Reboot\Contracts\Entity\UserRepositoryInterface;
 use Reboot\Security\Core\UserProvider;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 

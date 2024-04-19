@@ -11,8 +11,8 @@
 
 namespace Reboot\Security\Core;
 
-use Reboot\Contracts\UserInterface;
-use Reboot\Contracts\UserRepositoryInterface;
+use Reboot\Contracts\Entity\UserInterface;
+use Reboot\Contracts\Entity\UserRepositoryInterface;
 use Reboot\Entity\User;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\AttributesBasedUserProviderInterface;
