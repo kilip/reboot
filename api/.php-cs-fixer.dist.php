@@ -1,7 +1,7 @@
 <?php
 
 $header = <<<'HEADER'
-This file is part of the Purus project.
+This file is part of the reboot project.
 
 (c) Anthonius Munthi <me@itstoni.com>
 

@@ -9,7 +9,9 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     restart: unless-stopped
-    env_file: .env
+    env_file:
+      - .env
+      - .env.local
     ports:
       # HTTP
       - target: 80
@@ -29,6 +31,9 @@ services:
     image: ${IMAGE_PREFIX}-pwa
     build:
       context: ./pwa
+    env_file:
+      - .env
+      - .env.local
 
 volumes:
   caddy_config:

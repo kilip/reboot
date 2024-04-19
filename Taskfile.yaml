@@ -2,7 +2,7 @@
 version: "3"
 
 tasks:
-  default: task -l  
+  default: task -l
 
   boot:prod:
     desc: boot docker container
@@ -12,22 +12,28 @@ tasks:
   up:
     desc: boot docker container
     cmds:
-      - docker compose up -d
+      - docker compose up -d {{.CLI_ARGS}}
 
   start:
     desc: start docker container
     cmds:
-      - docker compose up -d
+      - docker compose up -d {{.CLI_ARGS}}
 
   stop:
     desc: stop docker container
     cmds:
-      - docker compose stop
-  
+      - docker compose stop {{.CLI_ARGS}}
+
+  restart:
+    desc: restart docker container
+    cmds:
+      - task: stop
+      - task: start
+
   rm:
     desc: cleanup containers
     cmds:
-      - docker compose rm
+      - docker compose rm {{.CLI_ARGS}}
 
   build:
     desc: build dev container
@@ -38,12 +44,12 @@ tasks:
   build:pwa:
     desc: Build pwa container image
     cmds:
-      - docker compose build pwa
-      
+      - docker compose build pwa {{.CLI_ARGS}}
+
   build:php:
     desc: Build php container image
     cmds:
-      - docker compose build api
+      - docker compose build api {{.CLI_ARGS}}
 
   build:prod:
     desc: Build production images
@@ -64,12 +70,12 @@ tasks:
     desc: execute bash shell in api container
     cmds:
       - docker compose exec api bash
-  
+
   sf:
     desc: execute bin/console command in api container
     cmds:
       - docker compose exec api bin/console {{.CLI_ARGS}}
-  
+
   sf:cc:
     desc: clear symfony cache
     cmds:
@@ -80,3 +86,18 @@ tasks:
     cmds:
       - docker compose exec api composer {{.CLI_ARGS}}
 
+  pnpm:
+    desc: execute pnpm in pwa container
+    cmds:
+      - docker compose exec pwa pnpm {{.CLI_ARGS}}
+
+  secrets:
+    desc: generate random secrets
+    cmds:
+      - openssl rand -base64 -hex 32
+
+  pass:init:
+    desc: generate secrets from password store
+    cmds:
+      - pass reboot/ssh-private-key > api/config/ssh/reboot
+      - pass reboot/ssh-public-key > api/config/ssh/reboot.pub

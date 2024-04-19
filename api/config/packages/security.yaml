@@ -10,18 +10,17 @@ security:
     main:
       #lazy: true
       provider: users 
-  
+      stateless: false
+      
   access_control:
-    - { path: ^/docs, roles: PUBLIC_ACCESS }
-    - { path: ^/, roles: ROLE_USER }
+    - { path: ^/admin, roles: ROLE_USER }
 
 when@prod: &prod
   security:
     firewalls:
       main:
         access_token:
-          token_handler:
-            oidc_user_info: '%env(resolve:OIDC_USER_INFO_URL)%'
+          token_handler: Reboot\Security\Authentik\AccessTokenHandler
 
 when@dev: *prod
 

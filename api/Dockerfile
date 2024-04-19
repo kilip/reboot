@@ -19,6 +19,7 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
 		wakeonlan \
+    	ssh-client \
 	;
 
 RUN set -eux; \
@@ -26,6 +27,7 @@ RUN set -eux; \
 		pcntl \
 		redis \
         pcov \
+		bcmath \
 	;
 
 COPY --link frankenphp/conf.d/app.ini $PHP_INI_DIR/conf.d/

@@ -1,5 +1,5 @@
 ---
-services:  
+services:
   api:
     build:
       target: frankenphp_dev
@@ -12,12 +12,17 @@ services:
       - /app/var
       - ./api/frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./api/frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
-      # - /app/vendor
+      - /app/vendor
 
   pwa:
     build:
       target: dev
+    environment:
+      API_PLATFORM_CREATE_CLIENT_ENTRYPOINT: http://api
+      API_PLATFORM_CREATE_CLIENT_OUTPUT: .
+      # On Linux, you may want to comment the following line for improved performance
+      WATCHPACK_POLLING: "true"
+      # Development usage only
+      NODE_TLS_REJECT_UNAUTHORIZED: "0"
     volumes:
-      - ./pwa:/app
-    ports:
-      - 5173:5173
+      - ./pwa:/srv/app

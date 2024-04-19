@@ -232,5 +232,8 @@
             "config/packages/web_profiler.yaml",
             "config/routes/web_profiler.yaml"
         ]
+    },
+    "web-token/jwt-bundle": {
+        "version": "3.4.3"
     }
 }
