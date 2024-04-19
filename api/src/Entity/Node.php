@@ -21,6 +21,7 @@ use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
 use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Controller\Node\PowerOffAction;
+use Reboot\Controller\Node\RebootAction;
 use Reboot\Controller\Node\WakeOnLanAction;
 use Reboot\Enum\NodeTypeEnum;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -46,13 +47,19 @@ use Symfony\Component\Uid\Uuid;
             uriTemplate: '/nodes/{id}/power-on',
             controller: WakeOnLanAction::class,
             security: "is_granted('ROLE_ADMIN')",
-            name: 'wakeonlan'
+            name: 'power-on'
         ),
         new Get(
             uriTemplate: '/nodes/{id}/power-off',
             controller: PowerOffAction::class,
             security: "is_granted('ROLE_ADMIN')",
             name: 'power-off'
+        ),
+        new Get(
+            uriTemplate: '/nodes/{id}/reboot',
+            controller: RebootAction::class,
+            security: "is_granted('ROLE_ADMIN')",
+            name: 'reboot'
         ),
     ]
 )]
