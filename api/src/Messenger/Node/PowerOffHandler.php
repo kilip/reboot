@@ -15,7 +15,7 @@ use Reboot\Contracts\Entity\NodeRepositoryInterface;
 use Reboot\Contracts\SshFactoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler]
+#[AsMessageHandler(fromTransport: 'async')]
 final readonly class PowerOffHandler
 {
     public function __construct(
@@ -32,5 +32,6 @@ final readonly class PowerOffHandler
             ->create($node);
 
         $ssh->addCommand('sudo poweroff');
+        $ssh->execute();
     }
 }

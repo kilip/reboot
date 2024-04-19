@@ -11,12 +11,13 @@
 
 namespace Reboot\Messenger\Node;
 
+use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Contracts\Entity\NodeRepositoryInterface;
 use Reboot\Contracts\SshFactoryInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler]
+#[AsMessageHandler(fromTransport: 'async')]
 class WakeOnLanHandler
 {
     public function __construct(
@@ -34,8 +35,12 @@ class WakeOnLanHandler
         $nodeRepository = $this->nodeRepository;
         $sshFactory = $this->sshFactory;
 
-        $node = $nodeRepository->findByIpAddress($this->executorTarget);
-        $ssh = $sshFactory->create($node);
+        $executor = $nodeRepository->findByIpAddress($this->executorTarget);
+        if (!$executor instanceof NodeInterface) {
+            throw NodeCommandException::wakeOnLanExecutorNotExists($this->executorTarget);
+        }
+
+        $ssh = $sshFactory->create($executor);
         $node = $nodeRepository->findById($command->getNodeId());
 
         $ssh->addCommand("wakeonlan {$node->getMacAddress()}");

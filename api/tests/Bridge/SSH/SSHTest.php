@@ -46,7 +46,7 @@ class SSHTest extends TestCase
         $this->assertContains($command, $ssh->getCommands());
     }
 
-    public function testOnExecute(): void
+    public function testPublishOutput(): void
     {
         $ssh = $this->sut;
 
@@ -58,6 +58,6 @@ class SSHTest extends TestCase
             ->method('publish')
             ->with($this->isInstanceOf(Update::class));
 
-        $ssh->onExecute('hello world');
+        $ssh->publishOutput('hello world');
     }
 }

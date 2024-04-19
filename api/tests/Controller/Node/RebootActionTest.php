@@ -12,8 +12,8 @@
 namespace Reboot\Tests\Controller\Node;
 
 use PHPUnit\Framework\TestCase;
-use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Controller\Node\RebootAction;
+use Reboot\Entity\Node;
 use Reboot\Messenger\Node\RebootCommand;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -24,7 +24,7 @@ class RebootActionTest extends TestCase
     public function testInvoke(): void
     {
         $bus = $this->createMock(MessageBusInterface::class);
-        $node = $this->createMock(NodeInterface::class);
+        $node = $this->createMock(Node::class);
         $action = new RebootAction($bus);
 
         $node->expects($this->once())

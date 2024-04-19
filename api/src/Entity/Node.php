@@ -20,6 +20,8 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use Doctrine\ORM\Mapping as ORM;
 use Reboot\Contracts\Entity\NodeInterface;
+use Reboot\Controller\Node\PowerOffAction;
+use Reboot\Controller\Node\RebootAction;
 use Reboot\Controller\Node\WakeOnLanAction;
 use Reboot\Enum\NodeTypeEnum;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -42,10 +44,22 @@ use Symfony\Component\Uid\Uuid;
             security: "is_granted('ROLE_ADMIN')",
         ),
         new Get(
-            uriTemplate: '/nodes/{id}/wakeonlan',
+            uriTemplate: '/nodes/{id}/power-on',
             controller: WakeOnLanAction::class,
             security: "is_granted('ROLE_ADMIN')",
-            name: 'wakeonlan'
+            name: 'power-on'
+        ),
+        new Get(
+            uriTemplate: '/nodes/{id}/power-off',
+            controller: PowerOffAction::class,
+            security: "is_granted('ROLE_ADMIN')",
+            name: 'power-off'
+        ),
+        new Get(
+            uriTemplate: '/nodes/{id}/reboot',
+            controller: RebootAction::class,
+            security: "is_granted('ROLE_ADMIN')",
+            name: 'reboot'
         ),
     ]
 )]
@@ -71,16 +85,19 @@ class Node implements NodeInterface
     private bool $online = false;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    private string $sshPrivateKey;
+    private ?string $sshPrivateKey = null;
 
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
-    private string $sshUser;
+    private ?string $sshUser = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private int $sshPort;
+    private ?int $sshPort = null;
 
     #[ORM\Column(type: 'integer', enumType: NodeTypeEnum::class)]
     private NodeTypeEnum $type = NodeTypeEnum::Unknown;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $draft = false;
 
     public function getId(): ?Uuid
     {
@@ -135,36 +152,36 @@ class Node implements NodeInterface
         return $this;
     }
 
-    public function getSshPrivateKey(): string
+    public function getSshPrivateKey(): ?string
     {
         return $this->sshPrivateKey;
     }
 
-    public function setSshPrivateKey(string $sshPrivateKey): Node
+    public function setSshPrivateKey(?string $sshPrivateKey): Node
     {
         $this->sshPrivateKey = $sshPrivateKey;
 
         return $this;
     }
 
-    public function getSshUser(): string
+    public function getSshUser(): ?string
     {
         return $this->sshUser;
     }
 
-    public function setSshUser(string $sshUser): Node
+    public function setSshUser(?string $sshUser): Node
     {
         $this->sshUser = $sshUser;
 
         return $this;
     }
 
-    public function getSshPort(): int
+    public function getSshPort(): ?int
     {
         return $this->sshPort;
     }
 
-    public function setSshPort(int $sshPort): Node
+    public function setSshPort(?int $sshPort): Node
     {
         $this->sshPort = $sshPort;
 
@@ -179,6 +196,18 @@ class Node implements NodeInterface
     public function setType(NodeTypeEnum $type): Node
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->draft;
+    }
+
+    public function setDraft(bool $draft): Node
+    {
+        $this->draft = $draft;
 
         return $this;
     }

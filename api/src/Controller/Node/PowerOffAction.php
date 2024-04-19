@@ -12,6 +12,7 @@
 namespace Reboot\Controller\Node;
 
 use Reboot\Contracts\Entity\NodeInterface;
+use Reboot\Entity\Node;
 use Reboot\Messenger\Node\PowerOffCommand;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -25,7 +26,7 @@ final readonly class PowerOffAction
     }
 
     public function __invoke(
-        NodeInterface $node,
+        Node $node,
     ): NodeInterface {
         $command = new PowerOffCommand($node->getId());
         $this->messageBus->dispatch($command);

@@ -12,8 +12,8 @@
 namespace Reboot\Tests\Controller\Node;
 
 use PHPUnit\Framework\TestCase;
-use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Controller\Node\WakeOnLanAction;
+use Reboot\Entity\Node;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Uid\Uuid;
@@ -22,7 +22,7 @@ class WakeOnLanActionTest extends TestCase
 {
     public function testInvoke(): void
     {
-        $node = $this->createMock(NodeInterface::class);
+        $node = $this->createMock(Node::class);
         $bus = $this->createMock(MessageBusInterface::class);
         $sut = new WakeOnLanAction($bus);
 

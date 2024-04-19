@@ -54,7 +54,7 @@ tasks:
   build:prod:
     desc: Build production images
     cmds:
-      - docker compose -f compose.yaml -f compose.prod.yaml build
+      - docker compose -f compose.yaml -f compose.prod.yaml build {{.CLI_ARGS}}
 
   logs:api:
     desc: show api container log
