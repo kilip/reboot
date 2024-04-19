@@ -11,7 +11,6 @@
 
 namespace Reboot\Messenger\Node;
 
-use MongoDB\Driver\Exception\CommandException;
 use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Contracts\Entity\NodeRepositoryInterface;
 use Reboot\Contracts\SshFactoryInterface;
@@ -37,7 +36,7 @@ class WakeOnLanHandler
         $sshFactory = $this->sshFactory;
 
         $executor = $nodeRepository->findByIpAddress($this->executorTarget);
-        if(!$executor instanceof NodeInterface){
+        if (!$executor instanceof NodeInterface) {
             throw NodeCommandException::wakeOnLanExecutorNotExists($this->executorTarget);
         }
 

@@ -112,6 +112,7 @@ class Node implements NodeInterface
     public function setHostname(string $hostname): Node
     {
         $this->hostname = $hostname;
+
         return $this;
     }
 
@@ -123,6 +124,7 @@ class Node implements NodeInterface
     public function setIpAddress(string $ipAddress): Node
     {
         $this->ipAddress = $ipAddress;
+
         return $this;
     }
 
@@ -134,6 +136,7 @@ class Node implements NodeInterface
     public function setMacAddress(string $macAddress): Node
     {
         $this->macAddress = $macAddress;
+
         return $this;
     }
 
@@ -145,6 +148,7 @@ class Node implements NodeInterface
     public function setOnline(bool $online): Node
     {
         $this->online = $online;
+
         return $this;
     }
 
@@ -156,6 +160,7 @@ class Node implements NodeInterface
     public function setSshPrivateKey(?string $sshPrivateKey): Node
     {
         $this->sshPrivateKey = $sshPrivateKey;
+
         return $this;
     }
 
@@ -167,6 +172,7 @@ class Node implements NodeInterface
     public function setSshUser(?string $sshUser): Node
     {
         $this->sshUser = $sshUser;
+
         return $this;
     }
 
@@ -178,6 +184,7 @@ class Node implements NodeInterface
     public function setSshPort(?int $sshPort): Node
     {
         $this->sshPort = $sshPort;
+
         return $this;
     }
 
@@ -189,6 +196,7 @@ class Node implements NodeInterface
     public function setType(NodeTypeEnum $type): Node
     {
         $this->type = $type;
+
         return $this;
     }
 
@@ -200,6 +208,7 @@ class Node implements NodeInterface
     public function setDraft(bool $draft): Node
     {
         $this->draft = $draft;
+
         return $this;
     }
 }

@@ -12,7 +12,6 @@
 namespace Reboot\Tests\Controller\Node;
 
 use PHPUnit\Framework\TestCase;
-use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Controller\Node\RebootAction;
 use Reboot\Entity\Node;
 use Reboot\Messenger\Node\RebootCommand;

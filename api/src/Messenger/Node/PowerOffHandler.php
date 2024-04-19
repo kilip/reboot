@@ -13,7 +13,6 @@ namespace Reboot\Messenger\Node;
 
 use Reboot\Contracts\Entity\NodeRepositoryInterface;
 use Reboot\Contracts\SshFactoryInterface;
-use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler(fromTransport: 'async')]

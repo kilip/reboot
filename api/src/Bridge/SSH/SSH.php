@@ -14,7 +14,6 @@ namespace Reboot\Bridge\SSH;
 use phpseclib3\Crypt\Common\AsymmetricKey;
 use phpseclib3\Net\SSH2;
 use Reboot\Contracts\SshInterface;
-use Reboot\Tests\Bridge\SSH\SshException;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 
@@ -54,7 +53,6 @@ final class SSH implements SshInterface
      */
     public function execute(): void
     {
-
         $ssh = new SSH2($this->host, $this->port, $this->timeout);
         if (!$ssh->login($this->username, $this->privateKey)) {
             $this->publishOutput(sprintf(
@@ -64,22 +62,16 @@ final class SSH implements SshInterface
             ));
         }
 
-        try{
+        try {
             foreach ($this->commands as $command) {
                 $this->currentCommand = $command;
                 $ssh->exec($command, [$this, 'publishOutput']);
             }
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             $this->publishOutput($exception->getMessage());
         }
 
         $ssh->disconnect();
-
-    }
-
-    private function doExecute()
-    {
-
     }
 
     public function publishOutput(string $output): void
