@@ -15,7 +15,7 @@ use Reboot\Contracts\Entity\NodeRepositoryInterface;
 use Reboot\Contracts\SshFactoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler]
+#[AsMessageHandler(fromTransport: 'async')]
 final readonly class RebootHandler
 {
     public function __construct(

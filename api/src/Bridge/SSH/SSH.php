@@ -54,17 +54,35 @@ final class SSH implements SshInterface
      */
     public function execute(): void
     {
+
         $ssh = new SSH2($this->host, $this->port, $this->timeout);
         if (!$ssh->login($this->username, $this->privateKey)) {
-            throw SshException::loginFailed(ipAddress: $this->host, username: $this->username);
+            $this->publishOutput(sprintf(
+                'Failed ssh login to host "%s" with username: "%s"',
+                $this->host,
+                $this->username
+            ));
         }
-        foreach ($this->commands as $command) {
-            $this->currentCommand = $command;
-            $ssh->exec($command, [$this, 'onExecute']);
+
+        try{
+            foreach ($this->commands as $command) {
+                $this->currentCommand = $command;
+                $ssh->exec($command, [$this, 'publishOutput']);
+            }
+        }catch (\Exception $exception){
+            $this->publishOutput($exception->getMessage());
         }
+
+        $ssh->disconnect();
+
     }
 
-    public function onExecute(string $output): void
+    private function doExecute()
+    {
+
+    }
+
+    public function publishOutput(string $output): void
     {
         $url = $this->mercureHub->getPublicUrl().'/ssh';
         $data = [

@@ -12,19 +12,20 @@
 namespace Reboot\Controller\Node;
 
 use Reboot\Contracts\Entity\NodeInterface;
+use Reboot\Entity\Node;
 use Reboot\Messenger\Node\WakeOnLanCommand;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsController]
-class WakeOnLanAction
+final readonly class WakeOnLanAction
 {
     public function __construct(private MessageBusInterface $messageBus)
     {
     }
 
     public function __invoke(
-        NodeInterface $node
+        Node $node
     ): NodeInterface {
         $nodeId = $node->getId();
         $command = new WakeOnLanCommand($nodeId);
