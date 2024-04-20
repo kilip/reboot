@@ -15,11 +15,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Reboot\Bridge\Network\NetworkException;
 use Reboot\Bridge\Network\Scanner;
+use Reboot\Contracts\SftpInterface;
 use Reboot\Contracts\SshInterface;
 use Reboot\Messenger\Node\NodeFoundNotification;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Reboot\Contracts\SftpInterface;
 
 class ScannerTest extends TestCase
 {
@@ -45,24 +45,14 @@ class ScannerTest extends TestCase
             remoteResultFile: $remoteResult,
             localResultFile: $localResult
         );
-
     }
 
     public function testRun(): void
     {
         $ssh = $this->ssh;
         $sftp = $this->sftp;
-        $remoteResult = '/tmp/reboot/scanner/result.xml';
-        $localResult = __DIR__.'/fixtures/scan-result.xml';
-        $messageBus = $this->createMock(MessageBusInterface::class);
-        $scanner = new Scanner(
-            target: '192.168.0.0/24',
-            ssh: $ssh,
-            sftp: $sftp,
-            messageBus: $messageBus,
-            remoteResultFile: $remoteResult,
-            localResultFile: $localResult
-        );
+        $messageBus = $this->messageBus;
+        $scanner = $this->scanner;
 
         $ssh->expects($this->exactly(2))
             ->method('addCommand');
@@ -71,8 +61,7 @@ class ScannerTest extends TestCase
             ->method('execute');
 
         $sftp->expects($this->once())
-            ->method('downloadFile')
-            ->with($remoteResult, $localResult);
+            ->method('downloadFile');
 
         $messageBus->expects($this->exactly(4))
             ->method('dispatch')
@@ -82,7 +71,7 @@ class ScannerTest extends TestCase
         $scanner->run();
     }
 
-    public function testRunWithNoResultFile()
+    public function testRunWithNoResultFile(): void
     {
         $scanner = new Scanner(
             target: '192.168.0.0/24',

@@ -60,7 +60,7 @@ EOC;
 
         $ssh->expects($this->once())
             ->method('addCommand')
-            ->with("sudo poweroff");
+            ->with('sudo poweroff');
 
         $ssh->expects($this->once())
             ->method('execute')

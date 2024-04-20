@@ -12,7 +12,6 @@
 namespace Reboot\Contracts;
 
 use Reboot\Contracts\Entity\NodeInterface;
-use Reboot\Contracts\SftpInterface;
 
 interface SshFactoryInterface
 {

@@ -1,11 +1,20 @@
 <?php
 
+/*
+ * This file is part of the reboot project.
+ *
+ * (c) Anthonius Munthi <me@itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Reboot\Tests\Bridge\Network;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Reboot\Bridge\Network\NetworkException;
 use Reboot\Bridge\Network\NetworkFactory;
-use PHPUnit\Framework\TestCase;
 use Reboot\Bridge\Network\Scanner;
 use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Contracts\Entity\NodeRepositoryInterface;
@@ -41,6 +50,9 @@ class NetworkFactoryTest extends TestCase
         $this->sshFactory->method('createSshClient')
             ->with($this->node)
             ->willReturn($this->ssh);
+        $this->sshFactory->method('createSftpClient')
+            ->with($this->node)
+            ->willReturn($this->sftp);
 
         $this->factory = new NetworkFactory(
             $this->nodeRepository,
@@ -50,7 +62,7 @@ class NetworkFactoryTest extends TestCase
         );
     }
 
-    public function testCreateNodeScanner()
+    public function testCreateNodeScanner(): void
     {
         $factory = $this->factory;
 
@@ -59,7 +71,7 @@ class NetworkFactoryTest extends TestCase
         $this->assertInstanceOf(Scanner::class, $return);
     }
 
-    public function testWithInvalidNavigator()
+    public function testWithInvalidNavigator(): void
     {
         $nodeRepository = $this->createMock(NodeRepositoryInterface::class);
         $nodeRepository->expects($this->any())

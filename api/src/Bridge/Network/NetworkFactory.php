@@ -37,7 +37,7 @@ final readonly class NetworkFactory implements NetworkFactoryInterface
         $sshFactory = $this->sshFactory;
         $node = $nodeRepository->findByIpAddress($this->navigator);
 
-        if(!$node instanceof NodeInterface){
+        if (!$node instanceof NodeInterface) {
             throw NetworkException::navigatorNodeNotExists($this->navigator);
         }
 

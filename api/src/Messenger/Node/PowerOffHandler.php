@@ -33,33 +33,31 @@ final readonly class PowerOffHandler
         $node = $this->nodeRepository
             ->findById($command->getNodeId());
 
-        if(!$node instanceof NodeInterface){
-            throw NodeCommandException::powerOffNodeNotExists(
-                $command->getNodeId()
-            );
+        if (!$node instanceof NodeInterface) {
+            throw NodeCommandException::powerOffNodeNotExists($command->getNodeId());
         }
 
-        if(!$node->isOnline()){
+        if (!$node->isOnline()) {
             $this->publish([
                 'success' => true,
-                'message' => "Node {$node->getHostname()} already turned off"
+                'message' => "Node {$node->getHostname()} already turned off",
             ]);
+
             return;
         }
 
-        try{
-
+        try {
             $ssh = $this->sshFactory
                 ->createSshClient($node);
 
             $ssh->addCommand('sudo poweroff');
             $ssh->execute();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             $msg = $e->getMessage();
             $regex = '/Connection closed \(by server\) prematurely/';
             $success = false;
 
-            if(false !== preg_match($regex, $msg)){
+            if (false !== preg_match($regex, $msg)) {
                 $success = true;
                 $msg = "Successfully turned off {$node->getHostname()}";
             }
@@ -71,7 +69,6 @@ final readonly class PowerOffHandler
 
             $this->publish($data);
         }
-
     }
 
     /**
@@ -86,6 +83,4 @@ final readonly class PowerOffHandler
         );
         $hub->publish($update);
     }
-
-
 }

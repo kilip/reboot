@@ -14,9 +14,9 @@ namespace Reboot\Bridge\SSH;
 use phpseclib3\Crypt\Common\AsymmetricKey;
 use phpseclib3\Crypt\PublicKeyLoader;
 use Reboot\Contracts\Entity\NodeInterface;
+use Reboot\Contracts\SftpInterface;
 use Reboot\Contracts\SshFactoryInterface;
 use Reboot\Contracts\SshInterface;
-use Reboot\Contracts\SftpInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mercure\HubInterface;
 
