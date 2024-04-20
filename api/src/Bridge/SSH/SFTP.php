@@ -17,35 +17,41 @@ use Reboot\Tests\Bridge\Network\SftpInterface;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 
-class SFTP implements SftpInterface
+final readonly class SFTP implements SftpInterface
 {
     public function __construct(
-        private readonly string $host,
-        private readonly string $username,
-        private readonly AsymmetricKey $privateKey,
-        private readonly HubInterface $mercureHub,
-        private readonly int $port = 22,
-        private readonly int $timeout = 10
+        private string $host,
+        private string $username,
+        private AsymmetricKey $privateKey,
+        private HubInterface $mercureHub,
+        private int $port = 22,
+        private int $timeout = 10,
+        private ?SftpClient $client = null
     ) {
     }
 
-    public function get(string $remoteResultFile, string $localResultFile): void
+    public function downloadFile(string $remote, string $destination): void
     {
-        $sftp = new SftpClient($this->host, $this->port, $this->timeout);
+        $sftp = $this->client ?? new SftpClient($this->host, $this->port, $this->timeout);
         $mercure = $this->mercureHub;
         $topic = $mercure->getPublicUrl().'/sftp';
 
-        $sftp->login($this->username, $this->privateKey);
-        $output = $sftp->get($remoteResultFile, $localResultFile);
+        if (!$sftp->login($this->username, $this->privateKey)) {
+            throw SshException::failedToLogin($this->host, $this->username, $this->port);
+        }
 
-        $data = [
-            'host' => $this->host,
-            'username' => $this->username,
-            'output' => $output,
-        ];
-
-        $mercure->publish(new Update($topic,
-            json_encode($data, JSON_THROW_ON_ERROR),
-        ));
+        try {
+            $output = $sftp->get($remote, $destination);
+            $data = [
+                'host' => $this->host,
+                'username' => $this->username,
+                'output' => $output,
+            ];
+            $mercure->publish(new Update($topic,
+                json_encode($data, JSON_THROW_ON_ERROR),
+            ));
+        } catch (\Exception $e) {
+            throw SshException::failedToDownloadFile($this->host, $this->username, $this->port, $remote, $destination, $e->getMessage());
+        }
     }
 }

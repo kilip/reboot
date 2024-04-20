@@ -19,8 +19,7 @@ final readonly class ScanNodesCommand
         private string $target,
 
         private ScanModeEnum $mode,
-    )
-    {
+    ) {
     }
 
     public function getTarget(): string

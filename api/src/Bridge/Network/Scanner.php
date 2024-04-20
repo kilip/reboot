@@ -45,7 +45,7 @@ final readonly class Scanner implements NetworkScannerInterface
         ]);
         $ssh = $this->ssh;
 
-        $ssh->addCommand('mkdir -p '. dirname($this->remoteResultFile));
+        $ssh->addCommand('mkdir -p '.dirname($this->remoteResultFile));
         $ssh->addCommand($command);
         $ssh->execute();
     }
@@ -59,7 +59,7 @@ final readonly class Scanner implements NetworkScannerInterface
             mkdir($dir, 0777, true);
         }
 
-        $this->sftp->get($this->remoteResultFile, $this->localResultFile);
+        $this->sftp->downloadFile($this->remoteResultFile, $this->localResultFile);
     }
 
     private function parseResult(): void
@@ -109,9 +109,9 @@ final readonly class Scanner implements NetworkScannerInterface
             }
         }
 
-        if(!isset($host['hostnames']['hostname'])){
+        if (!isset($host['hostnames']['hostname'])) {
             $hostname = $ip;
-        }else{
+        } else {
             $hostname = $host['hostnames']['hostname']['@attributes']['name'];
         }
 

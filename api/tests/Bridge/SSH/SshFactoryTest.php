@@ -11,7 +11,9 @@
 
 namespace Reboot\Tests\Bridge\SSH;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Reboot\Bridge\SSH\SFTP;
 use Reboot\Bridge\SSH\SSH;
 use Reboot\Bridge\SSH\SshFactory;
 use Reboot\Contracts\Entity\NodeInterface;
@@ -19,15 +21,46 @@ use Symfony\Component\Mercure\HubInterface;
 
 class SshFactoryTest extends TestCase
 {
-    public function testLoadPrivateKey(): void
+    private HubInterface|MockObject $mercureHub;
+
+    private NodeInterface|MockObject $node;
+
+    private SshFactory $factory;
+
+    protected function setUp(): void
     {
-        $mercureHub = $this->createMock(HubInterface::class);
-        $factory = new SshFactory(
-            mercureHub: $mercureHub,
+        $this->mercureHub = $this->createMock(HubInterface::class);
+        $this->node = $this->createMock(NodeInterface::class);
+
+        $this->factory = new SshFactory(
+            mercureHub: $this->mercureHub,
             defaultPrivateKey: __DIR__.'/fixtures/private'
         );
-        $node = $this->createMock(NodeInterface::class);
+    }
 
+    public function testCreateSshClient(): void
+    {
+        $factory = $this->factory;
+        $node = $this->node;
+        $this->setNodeExpectation($node);
+        $ssh = $factory->createSshClient($node);
+        $this->assertInstanceOf(SSH::class, $ssh);
+    }
+
+    public function testCreateSftpClient(): void
+    {
+        $factory = $this->factory;
+        $node = $this->node;
+
+        $this->setNodeExpectation($node);
+
+        $sftp = $factory->createSftpClient($node);
+
+        $this->assertInstanceOf(SFTP::class, $sftp);
+    }
+
+    protected function setNodeExpectation(NodeInterface|MockObject $node): void
+    {
         $node->expects($this->once())
             ->method('getSshPrivateKey')
             ->willReturn(null);
@@ -39,9 +72,5 @@ class SshFactoryTest extends TestCase
         $node->expects($this->once())
             ->method('getSshPort')
             ->willReturn(null);
-
-        $ssh = $factory->createSshClient($node);
-
-        $this->assertInstanceOf(SSH::class, $ssh);
     }
 }

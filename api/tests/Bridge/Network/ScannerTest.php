@@ -44,7 +44,7 @@ class ScannerTest extends TestCase
             ->method('execute');
 
         $sftp->expects($this->once())
-            ->method('get')
+            ->method('downloadFile')
             ->with($remoteResult, $localResult);
 
         $messageBus->expects($this->exactly(3))

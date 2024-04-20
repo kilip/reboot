@@ -13,5 +13,9 @@ namespace Reboot\Tests\Bridge\Network;
 
 interface SftpInterface
 {
-    public function get(string $remoteResultFile, string $localResultFile): void;
+    /**
+     * @param string $remote      The remote source
+     * @param string $destination The destination
+     */
+    public function downloadFile(string $remote, string $destination): void;
 }
