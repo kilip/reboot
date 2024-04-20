@@ -53,7 +53,6 @@ class ResultParser
         return $hosts;
     }
 
-
     /**
      * @param array<string,mixed> $hosts
      */

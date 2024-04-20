@@ -53,6 +53,7 @@ class NodeRepository extends ServiceEntityRepository implements NodeRepositoryIn
 
     /**
      * @param array<string,string> $criteria
+     *
      * @return Paginator<Node>|AbstractPaginator<Node>
      */
     public function getPaginator(int $firstResult, int $itemPerPage, array $criteria = []): Paginator|AbstractPaginator
@@ -68,17 +69,34 @@ class NodeRepository extends ServiceEntityRepository implements NodeRepositoryIn
 
     public function getNavigator(): NodeInterface
     {
-        $node = null;
         if (!is_null($node = $this->findByIpAddress($this->navigator))) {
             return $node;
         }
 
-        return $this->findOneBy(['hostname' => $node]);
+        if (!is_null($node = $this->findOneBy(['hostname' => $this->navigator]))) {
+            return $node;
+        }
+        throw new \Exception('Can not find navigator to use: '.$this->navigator);
     }
 
     public function store(NodeInterface $node): void
     {
         $this->getEntityManager()->persist($node);
         $this->getEntityManager()->flush();
+    }
+
+    public function findByMacAddress(string $macAddress): ?NodeInterface
+    {
+        return $this->findOneBy(['macAddress' => $macAddress]);
+    }
+
+    public function findByHostname(string $hostName): ?NodeInterface
+    {
+        return $this->findOneBy(['hostname' => $hostName]);
+    }
+
+    public function create(): NodeInterface
+    {
+        return new Node();
     }
 }

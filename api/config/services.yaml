@@ -24,6 +24,8 @@ services:
       - '../src/Bridge/Network/SSH/SSH.php'
       - '../src/Bridge/Network/SSH/SFTP.php'
       - '../src/Bridge/Network/NodeScanner.php'
+      - '../src/Bridge/Network/ResultNode.php'
+      - '../src/Bridge/Network/ResultParser.php'
   
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones

@@ -11,14 +11,13 @@
 
 namespace Reboot\Bridge\Network;
 
-use Reboot\Contracts\Entity\NodeInterface;
+use Psr\Log\LoggerInterface;
 use Reboot\Contracts\Entity\NodeRepositoryInterface;
 use Reboot\Contracts\NetworkFactoryInterface;
 use Reboot\Contracts\NodeScannerInterface;
 use Reboot\Contracts\NodeStatusUpdaterInterface;
 use Reboot\Contracts\SshFactoryInterface;
 use Reboot\Tasks\UpdateNodeStatusTask;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 final readonly class NetworkFactory implements NetworkFactoryInterface
@@ -27,22 +26,19 @@ final readonly class NetworkFactory implements NetworkFactoryInterface
         private NodeRepositoryInterface $nodeRepository,
         private SshFactoryInterface $sshFactory,
         private MessageBusInterface $messageBus,
-
-        #[Autowire('%env(resolve:SSH_NAVIGATOR)%')]
-        private string $navigator
+        private ?LoggerInterface $logger = null
     ) {
     }
 
     public function createNodeScanner(string $target): NodeScannerInterface
     {
+        $this->logger?->notice('Start creating node scanner');
+
         $nodeRepository = $this->nodeRepository;
         $sshFactory = $this->sshFactory;
-        $node = $nodeRepository->findByIpAddress($this->navigator);
+        $node = $nodeRepository->getNavigator();
 
-        if (!$node instanceof NodeInterface) {
-            throw NetworkException::navigatorNodeNotExists($this->navigator);
-        }
-
+        $this->logger?->notice('Using navigator {0}', [$node->getHostname()]);
         $ssh = $sshFactory->createSshClient($node);
         $sftp = $sshFactory->createSftpClient($node);
 

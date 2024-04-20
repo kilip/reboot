@@ -24,6 +24,7 @@ interface NodeRepositoryInterface
 
     /**
      * @param array<string,string> $criteria
+     *
      * @return Paginator<NodeInterface>|AbstractPaginator<NodeInterface>
      */
     public function getPaginator(int $firstResult, int $itemPerPage, array $criteria = []): Paginator|AbstractPaginator;
@@ -31,4 +32,10 @@ interface NodeRepositoryInterface
     public function store(NodeInterface $node): void;
 
     public function getNavigator(): NodeInterface;
+
+    public function findByMacAddress(string $macAddress): ?NodeInterface;
+
+    public function findByHostname(string $hostName): ?NodeInterface;
+
+    public function create(): NodeInterface;
 }

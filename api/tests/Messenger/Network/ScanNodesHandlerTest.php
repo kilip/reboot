@@ -14,7 +14,6 @@ namespace Reboot\Tests\Messenger\Network;
 use PHPUnit\Framework\TestCase;
 use Reboot\Contracts\NetworkFactoryInterface;
 use Reboot\Contracts\NodeScannerInterface;
-use Reboot\Enum\ScanModeEnum;
 use Reboot\Messenger\Network\ScanNodesCommand;
 use Reboot\Messenger\Network\ScanNodesHandler;
 

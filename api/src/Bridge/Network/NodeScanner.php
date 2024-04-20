@@ -11,6 +11,7 @@
 
 namespace Reboot\Bridge\Network;
 
+use Psr\Log\LoggerInterface;
 use Reboot\Contracts\NodeScannerInterface;
 use Reboot\Contracts\SftpInterface;
 use Reboot\Contracts\SshInterface;
@@ -32,10 +33,12 @@ final readonly class NodeScanner implements NodeScannerInterface
 
         private ?ResultParser $resultParser = null,
 
-        #[Autowire('%reboot.remote_path%/scan-nodes')]
+        private ?LoggerInterface $logger = null,
+
+        #[Autowire('%reboot.remote_path%')]
         string $remotePath = '/tmp/reboot',
 
-        #[Autowire('%reboot.cache_dir%/scan-nodes')]
+        #[Autowire('%reboot.cache_dir%')]
         string $cachePath = '/tmp/reboot',
     ) {
         $this->remoteResultFile = $remotePath.DIRECTORY_SEPARATOR.Uuid::v1().'.xml';
@@ -44,6 +47,7 @@ final readonly class NodeScanner implements NodeScannerInterface
 
     public function run(): void
     {
+        $this->logger?->notice('start executing ssh commands');
         $this->executeNmapCommand();
         $this->copyResult();
         $this->parseResult();

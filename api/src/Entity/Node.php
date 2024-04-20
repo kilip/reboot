@@ -23,7 +23,6 @@ use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Controller\Node\PowerOffAction;
 use Reboot\Controller\Node\RebootAction;
 use Reboot\Controller\Node\WakeOnLanAction;
-use Reboot\Controller\ScanNodesAction;
 use Reboot\Enum\NodeTypeEnum;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
@@ -33,7 +32,8 @@ use Symfony\Component\Uid\Uuid;
         new Post(
             security: "is_granted('ROLE_ADMIN')",
         ),
-        new GetCollection(),
+        new GetCollection(
+        ),
         new Get(),
         new Put(
             security: "is_granted('ROLE_ADMIN')",
@@ -61,12 +61,6 @@ use Symfony\Component\Uid\Uuid;
             controller: RebootAction::class,
             security: "is_granted('ROLE_ADMIN')",
             name: 'reboot'
-        ),
-        new GetCollection(
-            uriTemplate: '/nodes/scan',
-            controller: ScanNodesAction::class,
-            security: "is_granted('ROLE_ADMIN')",
-            name: 'scan-nodes'
         ),
     ],
     mercure: true

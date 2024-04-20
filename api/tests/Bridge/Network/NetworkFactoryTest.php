@@ -13,7 +13,6 @@ namespace Reboot\Tests\Bridge\Network;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Reboot\Bridge\Network\NetworkException;
 use Reboot\Bridge\Network\NetworkFactory;
 use Reboot\Bridge\Network\NodeScanner;
 use Reboot\Contracts\Entity\NodeInterface;
@@ -44,21 +43,17 @@ class NetworkFactoryTest extends TestCase
         $this->sftp = $this->createMock(SftpInterface::class);
 
         $this->nodeRepository
-            ->method('findByIpAddress')
-            ->with('navigator')
+            ->method('getNavigator')
             ->willReturn($this->node);
         $this->sshFactory->method('createSshClient')
-            ->with($this->node)
             ->willReturn($this->ssh);
         $this->sshFactory->method('createSftpClient')
-            ->with($this->node)
             ->willReturn($this->sftp);
 
         $this->factory = new NetworkFactory(
             $this->nodeRepository,
             $this->sshFactory,
-            $this->messageBus,
-            'navigator'
+            $this->messageBus
         );
     }
 
@@ -69,22 +64,5 @@ class NetworkFactoryTest extends TestCase
         $return = $factory->createNodeScanner('10.0.0.1');
 
         $this->assertInstanceOf(NodeScanner::class, $return);
-    }
-
-    public function testWithInvalidNavigator(): void
-    {
-        $nodeRepository = $this->createMock(NodeRepositoryInterface::class);
-        $nodeRepository->expects($this->any())
-            ->method('findByIpAddress')
-            ->willReturn(null);
-
-        $factory = new NetworkFactory(
-            $nodeRepository,
-            $this->sshFactory,
-            $this->messageBus,
-            'invalid-navigator'
-        );
-        $this->expectException(NetworkException::class);
-        $factory->createNodeScanner('10.0.0.1');
     }
 }
