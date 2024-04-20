@@ -11,7 +11,7 @@
 
 namespace Reboot\Contracts;
 
-interface NetworkScannerInterface
+interface NodeScannerInterface
 {
     public function run(): void;
 }

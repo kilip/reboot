@@ -17,6 +17,8 @@ interface NodeInterface
 {
     public function getId(): ?Uuid;
 
+    public function getHostname(): ?string;
+
     public function getMacAddress(): ?string;
 
     public function getIpAddress(): string;
@@ -26,4 +28,6 @@ interface NodeInterface
     public function getSshPrivateKey(): ?string;
 
     public function getSshUser(): ?string;
+
+    public function isOnline(): bool;
 }

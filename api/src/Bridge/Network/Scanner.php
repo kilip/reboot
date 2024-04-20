@@ -11,13 +11,13 @@
 
 namespace Reboot\Bridge\Network;
 
-use Reboot\Contracts\NetworkScannerInterface;
+use Reboot\Contracts\NodeScannerInterface;
+use Reboot\Contracts\SftpInterface;
 use Reboot\Contracts\SshInterface;
 use Reboot\Messenger\Node\NodeFoundNotification;
-use Reboot\Tests\Bridge\Network\SftpInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final readonly class Scanner implements NetworkScannerInterface
+final readonly class Scanner implements NodeScannerInterface
 {
     public function __construct(
         private string $target,
@@ -55,9 +55,11 @@ final readonly class Scanner implements NetworkScannerInterface
      */
     private function copyResult(): void
     {
+        // @codeCoverageIgnoreStart
         if (!is_dir($dir = dirname($this->localResultFile))) {
             mkdir($dir, 0777, true);
         }
+        // @codeCoverageIgnoreEnd
 
         $this->sftp->downloadFile($this->remoteResultFile, $this->localResultFile);
     }

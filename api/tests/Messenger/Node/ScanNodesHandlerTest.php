@@ -12,8 +12,8 @@
 namespace Reboot\Tests\Messenger\Node;
 
 use PHPUnit\Framework\TestCase;
-use Reboot\Contracts\NetworkScannerFactoryInterface;
-use Reboot\Contracts\NetworkScannerInterface;
+use Reboot\Contracts\NetworkFactoryInterface;
+use Reboot\Contracts\NodeScannerInterface;
 use Reboot\Enum\ScanModeEnum;
 use Reboot\Messenger\Node\ScanNodesCommand;
 use Reboot\Messenger\Node\ScanNodesHandler;
@@ -22,12 +22,12 @@ class ScanNodesHandlerTest extends TestCase
 {
     public function testInvoke(): void
     {
-        $factory = $this->createMock(NetworkScannerFactoryInterface::class);
-        $scanner = $this->createMock(NetworkScannerInterface::class);
+        $factory = $this->createMock(NetworkFactoryInterface::class);
+        $scanner = $this->createMock(NodeScannerInterface::class);
         $handler = new ScanNodesHandler($factory);
 
         $factory->expects($this->once())
-            ->method('create')
+            ->method('createNodeScanner')
             ->with('target')
             ->willReturn($scanner);
 

@@ -20,4 +20,12 @@ class NetworkException extends \Exception
             $resultFile
         ));
     }
+
+    public static function navigatorNodeNotExists(string $navigator): self
+    {
+        return new self(sprintf(
+            'Navigator node "%s" not exists.',
+            $navigator
+        ));
+    }
 }

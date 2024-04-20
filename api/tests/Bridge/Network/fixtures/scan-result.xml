@@ -27,6 +27,13 @@
             <hostname name="iris.lan" type="PTR"/>
         </hostnames>
     </host>
+    <host><status state="up" reason="arp-response" reason_ttl="0"/>
+        <address addr="10.0.0.2" addrtype="ipv4"/>
+        <address addr="4C:5E:0C:C6:23:72" addrtype="mac" vendor="Routerboard.com"/>
+        <hostnames>
+        </hostnames>
+        <times srtt="1397" rttvar="5000" to="100000"/>
+    </host>
     <runstats><finished time="1713542381" timestr="Fri Apr 19 23:59:41 2024" elapsed="1.99" summary="Nmap done at Fri Apr 19 23:59:41 2024; 256 IP addresses (5 hosts up) scanned in 1.99 seconds" exit="success"/><hosts up="5" down="251" total="256"/>
     </runstats>
 </nmaprun>

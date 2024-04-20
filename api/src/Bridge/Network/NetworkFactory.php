@@ -11,14 +11,15 @@
 
 namespace Reboot\Bridge\Network;
 
+use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Contracts\Entity\NodeRepositoryInterface;
-use Reboot\Contracts\NetworkScannerFactoryInterface;
-use Reboot\Contracts\NetworkScannerInterface;
+use Reboot\Contracts\NetworkFactoryInterface;
+use Reboot\Contracts\NodeScannerInterface;
 use Reboot\Contracts\SshFactoryInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final readonly class ScannerFactory implements NetworkScannerFactoryInterface
+final readonly class NetworkFactory implements NetworkFactoryInterface
 {
     public function __construct(
         private NodeRepositoryInterface $nodeRepository,
@@ -30,11 +31,16 @@ final readonly class ScannerFactory implements NetworkScannerFactoryInterface
     ) {
     }
 
-    public function create(string $target): NetworkScannerInterface
+    public function createNodeScanner(string $target): NodeScannerInterface
     {
         $nodeRepository = $this->nodeRepository;
         $sshFactory = $this->sshFactory;
         $node = $nodeRepository->findByIpAddress($this->navigator);
+
+        if(!$node instanceof NodeInterface){
+            throw NetworkException::navigatorNodeNotExists($this->navigator);
+        }
+
         $ssh = $sshFactory->createSshClient($node);
         $sftp = $sshFactory->createSftpClient($node);
 

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Reboot\Tests\Bridge\Network;
+namespace Reboot\Contracts;
 
 interface SftpInterface
 {

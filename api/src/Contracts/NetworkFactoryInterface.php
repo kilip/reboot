@@ -11,7 +11,7 @@
 
 namespace Reboot\Contracts;
 
-interface NetworkScannerFactoryInterface
+interface NetworkFactoryInterface
 {
-    public function create(string $target): NetworkScannerInterface;
+    public function createNodeScanner(string $target): NodeScannerInterface;
 }

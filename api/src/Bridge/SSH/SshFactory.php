@@ -16,7 +16,7 @@ use phpseclib3\Crypt\PublicKeyLoader;
 use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Contracts\SshFactoryInterface;
 use Reboot\Contracts\SshInterface;
-use Reboot\Tests\Bridge\Network\SftpInterface;
+use Reboot\Contracts\SftpInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mercure\HubInterface;
 

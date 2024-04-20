@@ -11,20 +11,20 @@
 
 namespace Reboot\Messenger\Node;
 
-use Reboot\Contracts\NetworkScannerFactoryInterface;
+use Reboot\Contracts\NetworkFactoryInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler(fromTransport: 'async')]
 final readonly class ScanNodesHandler
 {
     public function __construct(
-        private NetworkScannerFactoryInterface $networkScannerFactory
+        private NetworkFactoryInterface $networkScannerFactory
     ) {
     }
 
     public function __invoke(ScanNodesCommand $command): void
     {
-        $scanner = $this->networkScannerFactory->create($command->getTarget());
+        $scanner = $this->networkScannerFactory->createNodeScanner($command->getTarget());
         $scanner->run();
     }
 }

@@ -20,4 +20,12 @@ class NodeCommandException extends \Exception
             $executorHost
         ));
     }
+
+    public static function powerOffNodeNotExists(string $nodeId): self
+    {
+        return new self(sprintf(
+            'Power off node "%s" not exists',
+            $nodeId
+        ));
+    }
 }

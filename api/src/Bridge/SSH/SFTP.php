@@ -13,7 +13,7 @@ namespace Reboot\Bridge\SSH;
 
 use phpseclib3\Crypt\Common\AsymmetricKey;
 use phpseclib3\Net\SFTP as SftpClient;
-use Reboot\Tests\Bridge\Network\SftpInterface;
+use Reboot\Contracts\SftpInterface;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 

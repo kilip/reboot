@@ -11,22 +11,49 @@
 
 namespace Reboot\Tests\Bridge\Network;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Reboot\Bridge\Network\NetworkException;
 use Reboot\Bridge\Network\Scanner;
 use Reboot\Contracts\SshInterface;
 use Reboot\Messenger\Node\NodeFoundNotification;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Reboot\Contracts\SftpInterface;
 
 class ScannerTest extends TestCase
 {
-    public function testRun(): void
+    private MockObject|SshInterface $ssh;
+    private MockObject|SftpInterface $sftp;
+    private MockObject|MessageBusInterface $messageBus;
+
+    private Scanner $scanner;
+
+    protected function setUp(): void
     {
-        $ssh = $this->createMock(SshInterface::class);
-        $sftp = $this->createMock(SftpInterface::class);
+        $this->ssh = $this->createMock(SshInterface::class);
+        $this->sftp = $this->createMock(SftpInterface::class);
         $remoteResult = '/tmp/reboot/scanner/result.xml';
         $localResult = __DIR__.'/fixtures/scan-result.xml';
-        // $expectedNmapCommand = 'nmap -sn -sP -oX /tmp/reboot/scanner/result.xml 192.168.0.0/24';
+
+        $this->messageBus = $this->createMock(MessageBusInterface::class);
+        $this->scanner = new Scanner(
+            target: '192.168.0.0/24',
+            ssh: $this->ssh,
+            sftp: $this->sftp,
+            messageBus: $this->messageBus,
+            remoteResultFile: $remoteResult,
+            localResultFile: $localResult
+        );
+
+    }
+
+    public function testRun(): void
+    {
+        $ssh = $this->ssh;
+        $sftp = $this->sftp;
+        $remoteResult = '/tmp/reboot/scanner/result.xml';
+        $localResult = __DIR__.'/fixtures/scan-result.xml';
         $messageBus = $this->createMock(MessageBusInterface::class);
         $scanner = new Scanner(
             target: '192.168.0.0/24',
@@ -47,10 +74,26 @@ class ScannerTest extends TestCase
             ->method('downloadFile')
             ->with($remoteResult, $localResult);
 
-        $messageBus->expects($this->exactly(3))
+        $messageBus->expects($this->exactly(4))
             ->method('dispatch')
             ->with($this->isInstanceOf(NodeFoundNotification::class))
             ->willReturn(new Envelope(new \stdClass()));
+
+        $scanner->run();
+    }
+
+    public function testRunWithNoResultFile()
+    {
+        $scanner = new Scanner(
+            target: '192.168.0.0/24',
+            ssh: $this->ssh,
+            sftp: $this->sftp,
+            messageBus: $this->messageBus,
+            remoteResultFile: '/tmp/result.xml',
+            localResultFile: '/tmp/result.xml'
+        );
+
+        $this->expectException(NetworkException::class);
 
         $scanner->run();
     }

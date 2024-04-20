@@ -26,7 +26,7 @@ class SshException extends \Exception
     public static function failedToExecuteCommand(string $currentCommand, string $message): self
     {
         return new self(sprintf(
-            'Failed to execute command "%s" with message "%s"',
+            'Failed to execute command "%s", Error message: "%s"',
             $currentCommand,
             $message
         ));

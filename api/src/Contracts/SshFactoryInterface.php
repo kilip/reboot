@@ -12,7 +12,7 @@
 namespace Reboot\Contracts;
 
 use Reboot\Contracts\Entity\NodeInterface;
-use Reboot\Tests\Bridge\Network\SftpInterface;
+use Reboot\Contracts\SftpInterface;
 
 interface SshFactoryInterface
 {
