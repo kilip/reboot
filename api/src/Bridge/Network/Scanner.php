@@ -26,7 +26,7 @@ final readonly class Scanner implements NetworkScannerInterface
         private MessageBusInterface $messageBus,
         private string $remoteResultFile = '/tmp/reboot/scanner/result.xml',
         private string $localResultFile = '/tmp/reboot/scanner/result.xml',
-        private string $commandTemplate = 'nmap -sn -sP -oX {{result_file}} {{target}}'
+        private string $commandTemplate = 'sudo nmap -sn -sP -oX {{result_file}} {{target}}'
     ) {
     }
 
@@ -45,7 +45,7 @@ final readonly class Scanner implements NetworkScannerInterface
         ]);
         $ssh = $this->ssh;
 
-        $ssh->addCommand('mkdir -p '.$this->remoteResultFile);
+        $ssh->addCommand('mkdir -p '. dirname($this->remoteResultFile));
         $ssh->addCommand($command);
         $ssh->execute();
     }
@@ -73,23 +73,20 @@ final readonly class Scanner implements NetworkScannerInterface
         // $contents = file_get_contents($resultFile);
         $xml = simplexml_load_file($resultFile);
         $data = json_decode(json_encode($xml), true);
-        $hosts = [];
 
         foreach ($data['host'] as $host) {
-            $host = $this->createResultNode($host);
-            $this->messageBus->dispatch($host);
+            $this->createResultNode($host);
         }
     }
 
     /**
      * @param array<string,mixed> $host
      */
-    private function createResultNode(array $host): NodeFoundNotification
+    protected function createResultNode(array $host): void
     {
         $ip = null;
         $mac = null;
         $vendor = null;
-        $hostname = $host['hostnames']['hostname']['@attributes']['name'];
 
         // parse net address
         foreach ($host['address'] as $address) {
@@ -112,11 +109,19 @@ final readonly class Scanner implements NetworkScannerInterface
             }
         }
 
-        return new NodeFoundNotification(
+        if(!isset($host['hostnames']['hostname'])){
+            $hostname = $ip;
+        }else{
+            $hostname = $host['hostnames']['hostname']['@attributes']['name'];
+        }
+
+        $node = new NodeFoundNotification(
             ipAddress: $ip,
             hostname: $hostname,
             vendor: $vendor,
             macAddress: $mac
         );
+
+        $this->messageBus->dispatch($node);
     }
 }
