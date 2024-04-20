@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/bin/../share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.80 scan initiated Sat Apr 20 18:49:19 2024 as: nmap -sn -n -oX /tmp/reboot/status.xml 192.168.1.13 192.168.1.5 -->
+<nmaprun scanner="nmap" args="nmap -sn -n -oX /tmp/reboot/status.xml 192.168.1.1 192.168.1.2" start="1713610159" startstr="Sat Apr 20 18:49:19 2024" version="7.80" xmloutputversion="1.04">
+    <verbose level="0"/>
+    <debugging level="0"/>
+    <host><status state="up" reason="localhost-response" reason_ttl="0"/>
+        <address addr="192.168.1.1" addrtype="ipv4"/>
+        <hostnames>
+        </hostnames>
+    </host>
+    <runstats><finished time="1713610159" timestr="Sat Apr 20 18:49:19 2024" elapsed="0.41" summary="Nmap done at Sat Apr 20 18:49:19 2024; 2 IP addresses (1 host up) scanned in 0.41 seconds" exit="success"/><hosts up="1" down="1" total="2"/>
+    </runstats>
+</nmaprun>

@@ -17,7 +17,7 @@ use Reboot\Contracts\SshInterface;
 use Reboot\Messenger\Node\NodeFoundNotification;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-final readonly class Scanner implements NodeScannerInterface
+final readonly class NodeScanner implements NodeScannerInterface
 {
     public function __construct(
         private string $target,

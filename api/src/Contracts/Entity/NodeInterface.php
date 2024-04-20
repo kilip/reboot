@@ -29,5 +29,11 @@ interface NodeInterface
 
     public function getSshUser(): ?string;
 
+    public function setOnline(bool $status): self;
+
     public function isOnline(): bool;
+
+    public function setUptime(\DateTimeImmutable $uptime = null): self;
+
+    public function getUptime(): ?\DateTimeImmutable;
 }

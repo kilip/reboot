@@ -11,9 +11,7 @@
 
 namespace Reboot\Contracts;
 
-interface NetworkFactoryInterface
+interface NodeStatusUpdaterInterface
 {
-    public function createNodeScanner(string $target): NodeScannerInterface;
-
-    public function createNodeStatusUpdater(): NodeStatusUpdaterInterface;
+    public function run(): void;
 }

@@ -12,7 +12,7 @@
 namespace Reboot\Controller;
 
 use Reboot\Enum\ScanModeEnum;
-use Reboot\Messenger\Node\ScanNodesCommand;
+use Reboot\Messenger\Network\ScanNodesCommand;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;

@@ -57,6 +57,7 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "ext-simplexml": "*",
         "api-platform/core": "^3.2",
         "doctrine/dbal": "^3",
         "doctrine/doctrine-bundle": "^2.12",
@@ -77,6 +78,7 @@
         "symfony/messenger": "7.0.*",
         "symfony/property-access": "7.0.*",
         "symfony/property-info": "7.0.*",
+        "symfony/redis-messenger": "7.0.*",
         "symfony/runtime": "7.0.*",
         "symfony/security-bundle": "7.0.*",
         "symfony/serializer": "7.0.*",
@@ -84,8 +86,7 @@
         "symfony/uid": "7.0.*",
         "symfony/validator": "7.0.*",
         "symfony/yaml": "7.0.*",
-        "web-token/jwt-bundle": "^3.4",
-        "ext-simplexml": "*"
+        "web-token/jwt-bundle": "^3.4"
     },
     "require-dev": {
         "phpstan/extension-installer": "^1.3",

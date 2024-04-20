@@ -15,7 +15,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Reboot\Bridge\Network\NetworkException;
 use Reboot\Bridge\Network\NetworkFactory;
-use Reboot\Bridge\Network\Scanner;
+use Reboot\Bridge\Network\NodeScanner;
 use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Contracts\Entity\NodeRepositoryInterface;
 use Reboot\Contracts\SftpInterface;
@@ -68,7 +68,7 @@ class NetworkFactoryTest extends TestCase
 
         $return = $factory->createNodeScanner('10.0.0.1');
 
-        $this->assertInstanceOf(Scanner::class, $return);
+        $this->assertInstanceOf(NodeScanner::class, $return);
     }
 
     public function testWithInvalidNavigator(): void

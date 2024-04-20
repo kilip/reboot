@@ -92,6 +92,9 @@ class Node implements NodeInterface
     #[ORM\Column(type: 'boolean')]
     private bool $online = false;
 
+    #[ORM\Column(type: 'datetimetz_immutable', nullable: true)]
+    private ?\DateTimeImmutable $uptime = null;
+
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $sshPrivateKey = null;
 
@@ -216,6 +219,18 @@ class Node implements NodeInterface
     public function setDraft(bool $draft): Node
     {
         $this->draft = $draft;
+
+        return $this;
+    }
+
+    public function getUptime(): ?\DateTimeImmutable
+    {
+        return $this->uptime;
+    }
+
+    public function setUptime(\DateTimeImmutable $uptime = null): NodeInterface
+    {
+        $this->uptime = $uptime;
 
         return $this;
     }

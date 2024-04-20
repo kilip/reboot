@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/bin/../share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.80 scan initiated Sat Apr 20 15:56:42 2024 as: nmap -sn -n -oX /tmp/result.xml 10.0.0.1 10.0.0.2 10.0.0.3 10.0.0.5 -->
+<nmaprun scanner="nmap" args="nmap -sn -n -oX /tmp/result.xml 192.168.1.1 192.168.1.2 192.168.1.3" start="1713599802" startstr="Sat Apr 20 15:56:42 2024" version="7.80" xmloutputversion="1.04">
+    <verbose level="0"/>
+    <debugging level="0"/>
+    <host><status state="up" reason="arp-response" reason_ttl="0"/>
+        <address addr="192.168.1.1" addrtype="ipv4"/>
+        <address addr="D4:CA:6D:FF:FF:FF" addrtype="mac" vendor="Routerboard.com"/>
+        <hostnames>
+        </hostnames>
+        <times srtt="1581" rttvar="5000" to="100000"/>
+    </host>
+    <host><status state="up" reason="arp-response" reason_ttl="0"/>
+        <address addr="192.168.1.2" addrtype="ipv4"/>
+        <address addr="4C:5E:0C:FF:FF:FF" addrtype="mac" vendor="Routerboard.com"/>
+        <hostnames>
+        </hostnames>
+        <times srtt="510" rttvar="5000" to="100000"/>
+    </host>
+    <host><status state="up" reason="arp-response" reason_ttl="0"/>
+        <address addr="192.168.1.3" addrtype="ipv4"/>
+        <address addr="C4:AD:34:FF:FF:FF" addrtype="mac" vendor="Routerboard.com"/>
+        <hostnames>
+        </hostnames>
+        <times srtt="1167" rttvar="5000" to="100000"/>
+    </host>
+    <runstats><finished time="1713599802" timestr="Sat Apr 20 15:56:42 2024" elapsed="0.25" summary="Nmap done at Sat Apr 20 15:56:42 2024; 4 IP addresses (3 hosts up) scanned in 0.25 seconds" exit="success"/><hosts up="3" down="1" total="4"/>
+    </runstats>
+</nmaprun>

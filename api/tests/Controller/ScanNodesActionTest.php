@@ -13,7 +13,7 @@ namespace Reboot\Tests\Controller;
 
 use PHPUnit\Framework\TestCase;
 use Reboot\Controller\ScanNodesAction;
-use Reboot\Messenger\Node\ScanNodesCommand;
+use Reboot\Messenger\Network\ScanNodesCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;

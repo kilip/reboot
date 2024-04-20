@@ -9,11 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Reboot\Contracts;
+namespace Reboot\Messenger\Network;
 
-interface NetworkFactoryInterface
+final readonly class UpdateUptimeRequest
 {
-    public function createNodeScanner(string $target): NodeScannerInterface;
+    public function __construct(private string $nodeId)
+    {
+    }
 
-    public function createNodeStatusUpdater(): NodeStatusUpdaterInterface;
+    public function getNodeId(): string
+    {
+        return $this->nodeId;
+    }
 }

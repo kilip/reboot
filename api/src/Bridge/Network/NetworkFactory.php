@@ -15,7 +15,9 @@ use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Contracts\Entity\NodeRepositoryInterface;
 use Reboot\Contracts\NetworkFactoryInterface;
 use Reboot\Contracts\NodeScannerInterface;
+use Reboot\Contracts\NodeStatusUpdaterInterface;
 use Reboot\Contracts\SshFactoryInterface;
+use Reboot\Tasks\UpdateNodeStatusTask;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -44,11 +46,19 @@ final readonly class NetworkFactory implements NetworkFactoryInterface
         $ssh = $sshFactory->createSshClient($node);
         $sftp = $sshFactory->createSftpClient($node);
 
-        return new Scanner(
+        return new NodeScanner(
             target: $target,
             ssh: $ssh,
             sftp: $sftp,
             messageBus: $this->messageBus,
+        );
+    }
+
+    public function createNodeStatusUpdater(): NodeStatusUpdaterInterface
+    {
+        return new UpdateNodeStatusTask(
+            $this->nodeRepository,
+            $this->messageBus
         );
     }
 }

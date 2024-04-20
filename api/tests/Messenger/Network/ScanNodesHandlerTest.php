@@ -9,14 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Reboot\Tests\Messenger\Node;
+namespace Reboot\Tests\Messenger\Network;
 
 use PHPUnit\Framework\TestCase;
 use Reboot\Contracts\NetworkFactoryInterface;
 use Reboot\Contracts\NodeScannerInterface;
 use Reboot\Enum\ScanModeEnum;
-use Reboot\Messenger\Node\ScanNodesCommand;
-use Reboot\Messenger\Node\ScanNodesHandler;
+use Reboot\Messenger\Network\ScanNodesHandler;
 
 class ScanNodesHandlerTest extends TestCase
 {
@@ -34,6 +33,6 @@ class ScanNodesHandlerTest extends TestCase
         $scanner->expects($this->once())
             ->method('run');
 
-        $handler(new ScanNodesCommand('target', ScanModeEnum::ScanNodes));
+        $handler(new \Reboot\Messenger\Network\ScanNodesCommand('target', ScanModeEnum::ScanNodes));
     }
 }

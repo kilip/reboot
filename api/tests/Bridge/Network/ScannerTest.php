@@ -14,7 +14,7 @@ namespace Reboot\Tests\Bridge\Network;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Reboot\Bridge\Network\NetworkException;
-use Reboot\Bridge\Network\Scanner;
+use Reboot\Bridge\Network\NodeScanner;
 use Reboot\Contracts\SftpInterface;
 use Reboot\Contracts\SshInterface;
 use Reboot\Messenger\Node\NodeFoundNotification;
@@ -27,7 +27,7 @@ class ScannerTest extends TestCase
     private MockObject|SftpInterface $sftp;
     private MockObject|MessageBusInterface $messageBus;
 
-    private Scanner $scanner;
+    private NodeScanner $scanner;
 
     protected function setUp(): void
     {
@@ -37,7 +37,7 @@ class ScannerTest extends TestCase
         $localResult = __DIR__.'/fixtures/scan-result.xml';
 
         $this->messageBus = $this->createMock(MessageBusInterface::class);
-        $this->scanner = new Scanner(
+        $this->scanner = new NodeScanner(
             target: '192.168.0.0/24',
             ssh: $this->ssh,
             sftp: $this->sftp,
@@ -73,7 +73,7 @@ class ScannerTest extends TestCase
 
     public function testRunWithNoResultFile(): void
     {
-        $scanner = new Scanner(
+        $scanner = new NodeScanner(
             target: '192.168.0.0/24',
             ssh: $this->ssh,
             sftp: $this->sftp,

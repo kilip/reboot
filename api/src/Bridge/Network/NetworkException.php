@@ -28,4 +28,20 @@ class NetworkException extends \Exception
             $navigator
         ));
     }
+
+    public static function resultFileNotExists(string $filename): self
+    {
+        return new self(sprintf(
+            'Can not parse result file "%s". Result file not exists',
+            $filename
+        ));
+    }
+
+    public static function uptimeNodeNotExists(string $nodeId): self
+    {
+        return new self(sprintf(
+            'Can not update uptime with node id: "%s". Node not exists',
+            $nodeId
+        ));
+    }
 }

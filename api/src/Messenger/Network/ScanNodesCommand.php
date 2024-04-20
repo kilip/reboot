@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Reboot\Messenger\Node;
+namespace Reboot\Messenger\Network;
 
 use Reboot\Enum\ScanModeEnum;
 

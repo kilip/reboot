@@ -7,12 +7,15 @@ framework:
       # https://symfony.com/doc/current/messenger.html#transport-configuration
       async: '%env(MESSENGER_TRANSPORT_DSN)%'
       # failed: 'doctrine://default?queue_name=failed'
-      # sync: 'sync://'
+      # sync: '%env(MESSENGER_TRANSPORT_DSN)%'
     
     routing:
     # Route your messages to the transports
     # 'Reboot\Message\YourMessage': async
-
+      #Reboot\Messenger\Network\ScanNodesHandler: async
+      Reboot\Messenger\*: async
+      Reboot\Bridge\Network\Messenger\*: async
+      
 # when@test:
 #    framework:
 #        messenger:
