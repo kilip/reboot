@@ -49,7 +49,6 @@ class UpdateUptimeHandler
         $uptime = date_create_immutable_from_format('Y-m-d H:i:s', $strdate, new \DateTimeZone('Asia/Makassar'));
 
         $this->logger->notice('setting uptime for node {0} with "{1}"', [$node->getHostname(), $uptime]);
-
         $node->setUptime($uptime);
         $nodeRepository->store($node);
     }

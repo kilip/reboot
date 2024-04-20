@@ -45,10 +45,13 @@ class NodeRepository extends ServiceEntityRepository implements NodeRepositoryIn
 
     public function getTotal(): int
     {
-        $qb = $this->createQueryBuilder('node')
-            ->select('COUNT(node.id)');
+        $qb = $this->createQueryBuilder('node');
+        $qb->select('COUNT(node.id)')
+            ->where($qb->expr()->eq('node.draft', ':draft'))
+            ->setParameter('draft', false);
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return $qb->getQuery()
+            ->getSingleScalarResult();
     }
 
     /**
@@ -58,11 +61,14 @@ class NodeRepository extends ServiceEntityRepository implements NodeRepositoryIn
      */
     public function getPaginator(int $firstResult, int $itemPerPage, array $criteria = []): Paginator|AbstractPaginator
     {
-        $query = $this->createQueryBuilder('node')
-            ->getQuery()
-            ->setFirstResult($firstResult)
-            ->setMaxResults($itemPerPage)
+        $qb = $this->createQueryBuilder('node');
+        $qb->where($qb->expr()->eq('node.draft', ':draft'))
+            ->setParameter(':draft', false)
         ;
+
+        $query = $qb->getQuery()
+            ->setFirstResult($firstResult)
+            ->setMaxResults($itemPerPage);
 
         return new Paginator($query, false);
     }
