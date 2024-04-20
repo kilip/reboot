@@ -28,13 +28,13 @@ class UpdateNodeStatusTaskTest extends TestCase
     {
         $this->nodeRepository = $this->createMock(NodeRepositoryInterface::class);
         $this->messageBus = $this->createMock(MessageBusInterface::class);
-        $this->updater = new \Reboot\Tasks\UpdateNodeStatusTask(
+        $this->updater = new UpdateNodeStatusTask(
             $this->nodeRepository,
             $this->messageBus,
         );
     }
 
-    public function testRun()
+    public function testRun(): void
     {
         $this->nodeRepository->expects($this->once())
             ->method('getTotal')

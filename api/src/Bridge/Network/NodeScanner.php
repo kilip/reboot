@@ -14,20 +14,32 @@ namespace Reboot\Bridge\Network;
 use Reboot\Contracts\NodeScannerInterface;
 use Reboot\Contracts\SftpInterface;
 use Reboot\Contracts\SshInterface;
-use Reboot\Messenger\Node\NodeFoundNotification;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Uid\Uuid;
 
 final readonly class NodeScanner implements NodeScannerInterface
 {
+    private string $remoteResultFile;
+    private string $localResultFile;
+
     public function __construct(
         private string $target,
         private SshInterface $ssh,
         private SftpInterface $sftp,
         private MessageBusInterface $messageBus,
-        private string $remoteResultFile = '/tmp/reboot/scanner/result.xml',
-        private string $localResultFile = '/tmp/reboot/scanner/result.xml',
-        private string $commandTemplate = 'sudo nmap -sn -sP -oX {{result_file}} {{target}}'
+        private string $commandTemplate = 'sudo nmap -sn -sP -oX {{result_file}} {{target}}',
+
+        private ?ResultParser $resultParser = null,
+
+        #[Autowire('%reboot.remote_path%/scan-nodes')]
+        string $remotePath = '/tmp/reboot',
+
+        #[Autowire('%reboot.cache_dir%/scan-nodes')]
+        string $cachePath = '/tmp/reboot',
     ) {
+        $this->remoteResultFile = $remotePath.DIRECTORY_SEPARATOR.Uuid::v1().'.xml';
+        $this->localResultFile = $cachePath.DIRECTORY_SEPARATOR.Uuid::v1().'.xml';
     }
 
     public function run(): void
@@ -66,64 +78,11 @@ final readonly class NodeScanner implements NodeScannerInterface
 
     private function parseResult(): void
     {
-        $resultFile = $this->localResultFile;
+        $parser = $this->resultParser ?? new ResultParser();
+        $hosts = $parser->parse($this->localResultFile);
 
-        if (!is_file($this->localResultFile)) {
-            throw NetworkException::scanResultFileNotExists($resultFile);
+        foreach ($hosts as $host) {
+            $this->messageBus->dispatch($host);
         }
-
-        // $contents = file_get_contents($resultFile);
-        $xml = simplexml_load_file($resultFile);
-        $data = json_decode(json_encode($xml), true);
-
-        foreach ($data['host'] as $host) {
-            $this->createResultNode($host);
-        }
-    }
-
-    /**
-     * @param array<string,mixed> $host
-     */
-    protected function createResultNode(array $host): void
-    {
-        $ip = null;
-        $mac = null;
-        $vendor = null;
-
-        // parse net address
-        foreach ($host['address'] as $address) {
-            if (!array_key_exists('@attributes', $address)) {
-                $attr = $address;
-            } else {
-                $attr = $address['@attributes'];
-            }
-
-            $type = $attr['addrtype'];
-
-            if ('ipv4' === $type) {
-                $ip = $attr['addr'];
-            }
-            if ('mac' === $type) {
-                $mac = $attr['addr'];
-            }
-            if (array_key_exists('vendor', $attr)) {
-                $vendor = $attr['vendor'];
-            }
-        }
-
-        if (!isset($host['hostnames']['hostname'])) {
-            $hostname = $ip;
-        } else {
-            $hostname = $host['hostnames']['hostname']['@attributes']['name'];
-        }
-
-        $node = new NodeFoundNotification(
-            ipAddress: $ip,
-            hostname: $hostname,
-            vendor: $vendor,
-            macAddress: $mac
-        );
-
-        $this->messageBus->dispatch($node);
     }
 }

@@ -228,7 +228,7 @@ class Node implements NodeInterface
         return $this->uptime;
     }
 
-    public function setUptime(\DateTimeImmutable $uptime = null): NodeInterface
+    public function setUptime(?\DateTimeImmutable $uptime = null): NodeInterface
     {
         $this->uptime = $uptime;
 

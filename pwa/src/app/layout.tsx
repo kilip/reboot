@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import AuthProvider from "./context/AuthProvider";
 import "./globals.css";
+import { auth } from "./auth";
+import {SessionProvider} from "next-auth/react";
+import {ReactNode} from "react";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,15 +13,18 @@ export const metadata: Metadata = {
   description: "The Homelab Command Center",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}:{
+  children: ReactNode;
+}) {
+  const session = await auth();
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>{children}</AuthProvider>
+      <SessionProvider session={session}>
+        {children}
+      </SessionProvider>
       </body>
     </html>
   );

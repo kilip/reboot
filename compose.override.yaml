@@ -14,7 +14,7 @@ services:
       - /app/var
       - ./api/frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./api/frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
-      - /app/vendor
+      #- /app/vendor
 
   pwa:
     build:

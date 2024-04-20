@@ -51,6 +51,10 @@ class NodeRepository extends ServiceEntityRepository implements NodeRepositoryIn
         return $qb->getQuery()->getSingleScalarResult();
     }
 
+    /**
+     * @param array<string,string> $criteria
+     * @return Paginator<Node>|AbstractPaginator<Node>
+     */
     public function getPaginator(int $firstResult, int $itemPerPage, array $criteria = []): Paginator|AbstractPaginator
     {
         $query = $this->createQueryBuilder('node')

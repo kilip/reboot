@@ -11,7 +11,6 @@
 
 namespace Reboot\Controller;
 
-use Reboot\Enum\ScanModeEnum;
 use Reboot\Messenger\Network\ScanNodesCommand;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +31,7 @@ final readonly class ScanNodesAction
     ): JsonResponse {
         $json = $request->toArray();
         $target = $json['target'];
-        $command = new ScanNodesCommand($target, ScanModeEnum::ScanNodes);
+        $command = new ScanNodesCommand($target);
 
         $this->messageBus->dispatch($command);
 

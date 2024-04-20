@@ -16,7 +16,6 @@ use Reboot\Bridge\Network\NetworkException;
 use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Contracts\Entity\NodeRepositoryInterface;
 use Reboot\Contracts\SshFactoryInterface;
-use Reboot\Contracts\SshInterface;
 use Reboot\Messenger\Network\UpdateUptimeRequest;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -27,7 +26,7 @@ class UpdateUptimeHandler
         private NodeRepositoryInterface $nodeRepository,
         private SshFactoryInterface $sshFactory,
         private LoggerInterface $logger
-    ){
+    ) {
     }
 
     public function __invoke(UpdateUptimeRequest $request): void
@@ -35,7 +34,7 @@ class UpdateUptimeHandler
         $nodeRepository = $this->nodeRepository;
         $node = $nodeRepository->findById($request->getNodeId());
 
-        if(!$node instanceof NodeInterface){
+        if (!$node instanceof NodeInterface) {
             throw NetworkException::uptimeNodeNotExists($request->getNodeId());
         }
 
@@ -53,6 +52,5 @@ class UpdateUptimeHandler
 
         $node->setUptime($uptime);
         $nodeRepository->store($node);
-
     }
 }

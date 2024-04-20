@@ -1,8 +1,7 @@
-import { config } from "../util/config";
-import { type Session as DefaultSession, TokenSet, User } from "next-auth";
-import NextAuth from "next-auth/next";
+import { config } from "@/util/config";
+import { type TokenSet } from "@auth/core/types";
+import NextAuth, { type Session as DefaultSession, type User } from "next-auth";
 import AuthentikProvider from "next-auth/providers/authentik";
-import { signOut as logout, type SignOutParams } from "next-auth/react";
 
 export interface Session extends DefaultSession {
   error?: "RefreshAccessTokenError";
@@ -26,21 +25,8 @@ interface Account {
   refresh_token: string;
 }
 
-interface SignOutResponse {
-  url: string;
-}
-
-export async function signOut<R extends boolean = true>(
-  session: DefaultSession,
-  options?: SignOutParams<R>
-): Promise<R extends true ? undefined : SignOutResponse> {
-  return await logout({
-    // @ts-ignore
-    callbackUrl: `${config.oidcIssuer}/end-session`,
-  });
-}
-
-export const handler = NextAuth({
+console.log(config.oidcIssuer);
+export const { handlers: { GET, POST }, auth } = NextAuth({
   callbacks: {
     // @ts-ignore
     async jwt({

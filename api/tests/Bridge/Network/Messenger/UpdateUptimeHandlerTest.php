@@ -1,12 +1,20 @@
 <?php
 
+/*
+ * This file is part of the reboot project.
+ *
+ * (c) Anthonius Munthi <me@itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Reboot\Tests\Bridge\Network\Messenger;
 
-use Hoa\Iterator\Mock;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Reboot\Bridge\Network\Messenger\UpdateUptimeHandler;
-use PHPUnit\Framework\TestCase;
 use Reboot\Bridge\Network\NetworkException;
 use Reboot\Contracts\Entity\NodeInterface;
 use Reboot\Contracts\Entity\NodeRepositoryInterface;
@@ -23,7 +31,6 @@ class UpdateUptimeHandlerTest extends TestCase
     private MockObject|LoggerInterface $logger;
 
     private UpdateUptimeHandler $handler;
-
 
     public function setUp(): void
     {
@@ -54,7 +61,7 @@ class UpdateUptimeHandlerTest extends TestCase
         $ssh->expects($this->once())
             ->method('addCommand')
             ->with('uptime -s')
-            ;
+        ;
         $ssh->expects($this->once())
             ->method('execute');
 
@@ -67,7 +74,6 @@ class UpdateUptimeHandlerTest extends TestCase
             ->with($this->node);
 
         $handler(new UpdateUptimeRequest('some-id'));
-
     }
 
     public function testInvokeWithInvalidID(): void

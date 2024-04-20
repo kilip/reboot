@@ -102,5 +102,4 @@ final class SSH implements SshInterface
     {
         return $this->outputs;
     }
-
 }

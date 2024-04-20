@@ -19,25 +19,42 @@ use Reboot\Contracts\SshFactoryInterface;
 use Reboot\Contracts\SshInterface;
 use Reboot\Messenger\Network\NodeStatusUpdateRequest;
 use Reboot\Messenger\Network\UpdateUptimeRequest;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[AsMessageHandler(fromTransport: 'async')]
-final readonly class NodeStatusUpdateHandler
+final class NodeStatusUpdateHandler
 {
     private SshInterface $ssh;
     private SftpInterface $sftp;
 
+    private string $localResult;
+    private string $remoteResult;
+
     public function __construct(
-        private NodeRepositoryInterface $nodeRepository,
+        private readonly NodeRepositoryInterface $nodeRepository,
         SshFactoryInterface $sshFactory,
-        private MessageBusInterface $messageBus,
-        private string $remoteResult = '/tmp/reboot/status.xml',
-        private string $localResult = '/tmp/reboot/status.xml',
+        private readonly MessageBusInterface $messageBus,
+
+        #[Autowire('%reboot.remote_path%/network/status')]
+        string $remoteTempPath,
+
+        #[Autowire('%reboot.cache_dir%/network/status')]
+        string $cachePath,
+
+        private ?ResultParser $resultParser = null,
     ) {
         $navigator = $this->nodeRepository->getNavigator();
         $this->ssh = $sshFactory->createSshClient($navigator);
         $this->sftp = $sshFactory->createSftpClient($navigator);
+        $this->localResult = $cachePath.DIRECTORY_SEPARATOR.Uuid::v1().'.xml';
+        $this->remoteResult = $remoteTempPath.DIRECTORY_SEPARATOR.Uuid::v1().'.xml';
+
+        if (is_null($this->resultParser)) {
+            $this->resultParser = new ResultParser();
+        }
     }
 
     public function __invoke(NodeStatusUpdateRequest $request): void
@@ -58,7 +75,7 @@ final readonly class NodeStatusUpdateHandler
     }
 
     /**
-     * @param array<string, NodeInterface $nodes
+     * @param array<string, NodeInterface> $nodes
      */
     private function executeNmapCommand(array $nodes): void
     {
@@ -88,7 +105,7 @@ final readonly class NodeStatusUpdateHandler
      */
     private function parseResultFile(array $nodes): void
     {
-        $parser = new ResultParser();
+        $parser = $this->resultParser;
         $parser->parse($this->localResult);
         $onlineIps = $parser->getOnlineIps();
 
@@ -103,7 +120,7 @@ final readonly class NodeStatusUpdateHandler
                 $msg = new UpdateUptimeRequest($node->getId());
                 $this->messageBus->dispatch($msg);
             }
-            if(false === $online){
+            if (false === $online) {
                 $node->setUptime(null);
             }
 

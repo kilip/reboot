@@ -24,6 +24,7 @@ interface NodeRepositoryInterface
 
     /**
      * @param array<string,string> $criteria
+     * @return Paginator<NodeInterface>|AbstractPaginator<NodeInterface>
      */
     public function getPaginator(int $firstResult, int $itemPerPage, array $criteria = []): Paginator|AbstractPaginator;
 

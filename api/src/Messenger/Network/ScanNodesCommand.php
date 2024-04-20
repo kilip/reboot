@@ -11,24 +11,15 @@
 
 namespace Reboot\Messenger\Network;
 
-use Reboot\Enum\ScanModeEnum;
-
 final readonly class ScanNodesCommand
 {
     public function __construct(
         private string $target,
-
-        private ScanModeEnum $mode,
     ) {
     }
 
     public function getTarget(): string
     {
         return $this->target;
-    }
-
-    public function getMode(): ScanModeEnum
-    {
-        return $this->mode;
     }
 }

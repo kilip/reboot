@@ -14,17 +14,20 @@ namespace Reboot\Bridge\Network;
 class ResultParser
 {
     /**
-     * @var array<string,string>
+     * @var array<int,string>
      */
     private array $onlineIps = [];
 
+    /**
+     * @return array<int,string>
+     */
     public function getOnlineIps(): array
     {
         return $this->onlineIps;
     }
 
     /**
-     * @return array<string, ResultNode>
+     * @return array<int, ResultNode>
      */
     public function parse(string $filename): array
     {
@@ -50,12 +53,16 @@ class ResultParser
         return $hosts;
     }
 
-    private function parseHost(array $host): ResultNode
+
+    /**
+     * @param array<string,mixed> $hosts
+     */
+    private function parseHost(array $hosts): ResultNode
     {
         $ip = null;
         $mac = null;
         $vendor = null;
-        $address = $host['address'];
+        $address = $hosts['address'];
 
         if (1 == count($address)) {
             $ip = $address['@attributes']['addr'];
@@ -77,8 +84,8 @@ class ResultParser
         }
 
         $hostname = $ip;
-        if (count($host['hostnames']) > 0) {
-            $hostname = $host['hostnames']['hostname']['@attributes']['name'];
+        if (count($hosts['hostnames']) > 0) {
+            $hostname = $hosts['hostnames']['hostname']['@attributes']['name'];
         }
 
         $this->onlineIps[] = $ip;

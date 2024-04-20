@@ -15,6 +15,7 @@ use PHPUnit\Framework\TestCase;
 use Reboot\Contracts\NetworkFactoryInterface;
 use Reboot\Contracts\NodeScannerInterface;
 use Reboot\Enum\ScanModeEnum;
+use Reboot\Messenger\Network\ScanNodesCommand;
 use Reboot\Messenger\Network\ScanNodesHandler;
 
 class ScanNodesHandlerTest extends TestCase
@@ -33,6 +34,6 @@ class ScanNodesHandlerTest extends TestCase
         $scanner->expects($this->once())
             ->method('run');
 
-        $handler(new \Reboot\Messenger\Network\ScanNodesCommand('target', ScanModeEnum::ScanNodes));
+        $handler(new ScanNodesCommand('target'));
     }
 }

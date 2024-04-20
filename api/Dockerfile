@@ -17,12 +17,6 @@ FROM frankenphp_upstream AS frankenphp_base
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install --no-install-recommends -y \
-		wakeonlan \
-    	ssh-client \
-    	nmap \
-	;
-
 RUN set -eux; \
 	install-php-extensions \
 		pcntl \

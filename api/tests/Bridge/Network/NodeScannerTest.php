@@ -15,17 +15,20 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Reboot\Bridge\Network\NetworkException;
 use Reboot\Bridge\Network\NodeScanner;
+use Reboot\Bridge\Network\ResultNode;
+use Reboot\Bridge\Network\ResultParser;
 use Reboot\Contracts\SftpInterface;
 use Reboot\Contracts\SshInterface;
-use Reboot\Messenger\Node\NodeFoundNotification;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class ScannerTest extends TestCase
+class NodeScannerTest extends TestCase
 {
     private MockObject|SshInterface $ssh;
     private MockObject|SftpInterface $sftp;
     private MockObject|MessageBusInterface $messageBus;
+
+    private MockObject|ResultParser $resultParser;
 
     private NodeScanner $scanner;
 
@@ -33,17 +36,15 @@ class ScannerTest extends TestCase
     {
         $this->ssh = $this->createMock(SshInterface::class);
         $this->sftp = $this->createMock(SftpInterface::class);
-        $remoteResult = '/tmp/reboot/scanner/result.xml';
-        $localResult = __DIR__.'/fixtures/scan-result.xml';
-
         $this->messageBus = $this->createMock(MessageBusInterface::class);
+        $this->resultParser = $this->createMock(ResultParser::class);
+
         $this->scanner = new NodeScanner(
             target: '192.168.0.0/24',
             ssh: $this->ssh,
             sftp: $this->sftp,
             messageBus: $this->messageBus,
-            remoteResultFile: $remoteResult,
-            localResultFile: $localResult
+            resultParser: $this->resultParser,
         );
     }
 
@@ -63,10 +64,16 @@ class ScannerTest extends TestCase
         $sftp->expects($this->once())
             ->method('downloadFile');
 
-        $messageBus->expects($this->exactly(4))
+        $messageBus->expects($this->exactly(1))
             ->method('dispatch')
-            ->with($this->isInstanceOf(NodeFoundNotification::class))
+            ->with($this->isInstanceOf(ResultNode::class))
             ->willReturn(new Envelope(new \stdClass()));
+
+        $resultNode = new ResultNode('hostname', 'ip');
+        $this->resultParser->expects($this->once())
+            ->method('parse')
+            ->willReturn([$resultNode])
+        ;
 
         $scanner->run();
     }
@@ -78,8 +85,6 @@ class ScannerTest extends TestCase
             ssh: $this->ssh,
             sftp: $this->sftp,
             messageBus: $this->messageBus,
-            remoteResultFile: '/tmp/result.xml',
-            localResultFile: '/tmp/result.xml'
         );
 
         $this->expectException(NetworkException::class);

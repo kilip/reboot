@@ -17,5 +17,8 @@ interface SshInterface
 
     public function execute(): void;
 
+    /**
+     * @return array<int,string>
+     */
     public function getOutputs(): array;
 }

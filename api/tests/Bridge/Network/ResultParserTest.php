@@ -22,6 +22,7 @@ class ResultParserTest extends TestCase
         $hosts = $parser->parse(__DIR__.'/fixtures/scan-result.xml');
 
         $this->assertCount(4, $hosts);
+        $this->assertCount(4, $parser->getOnlineIps());
     }
 
     public function testBug01(): void
