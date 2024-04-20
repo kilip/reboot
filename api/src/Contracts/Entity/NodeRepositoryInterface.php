@@ -11,9 +11,31 @@
 
 namespace Reboot\Contracts\Entity;
 
+use ApiPlatform\Doctrine\Orm\AbstractPaginator;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 interface NodeRepositoryInterface
 {
     public function findById(string $id): ?NodeInterface;
 
     public function findByIpAddress(string $ipAddress): ?NodeInterface;
+
+    public function getTotal(): int;
+
+    /**
+     * @param array<string,string> $criteria
+     *
+     * @return Paginator<NodeInterface>|AbstractPaginator<NodeInterface>
+     */
+    public function getPaginator(int $firstResult, int $itemPerPage, array $criteria = []): Paginator|AbstractPaginator;
+
+    public function store(NodeInterface $node): void;
+
+    public function getNavigator(): NodeInterface;
+
+    public function findByMacAddress(string $macAddress): ?NodeInterface;
+
+    public function findByHostname(string $hostName): ?NodeInterface;
+
+    public function create(): NodeInterface;
 }

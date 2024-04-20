@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///usr/bin/../share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.80 scan initiated Fri Apr 19 23:59:39 2024 as: nmap -sn -sP -oX /tmp/test.xml 192.168.0.0/24 -->
+<nmaprun scanner="nmap" args="nmap -sn -sP -oX /tmp/test.xml 192.168.0.0/24" start="1713542379" startstr="Fri Apr 19 23:59:39 2024" version="7.80" xmloutputversion="1.04">
+    <verbose level="0"/>
+    <debugging level="0"/>
+    <host><status state="up" reason="arp-response" reason_ttl="0"/>
+        <address addr="192.168.0.1" addrtype="ipv4"/>
+        <address addr="D4:CA:6D:AF:09:22" addrtype="mac" vendor="Routerboard.com"/>
+        <hostnames>
+            <hostname name="ares.lan" type="PTR"/>
+        </hostnames>
+        <times srtt="558" rttvar="5000" to="100000"/>
+    </host>
+    <host><status state="up" reason="arp-response" reason_ttl="0"/>
+        <address addr="192.168.0.15" addrtype="ipv4"/>
+        <address addr="B8:27:EB:4B:2E:6A" addrtype="mac" vendor="Raspberry Pi Foundation"/>
+        <hostnames>
+            <hostname name="io.lan" type="PTR"/>
+        </hostnames>
+        <times srtt="516" rttvar="3811" to="100000"/>
+    </host>
+    <host><status state="up" reason="localhost-response" reason_ttl="0"/>
+        <address addr="192.168.0.13" addrtype="ipv4"/>
+        <hostnames>
+            <hostname name="iris.lan" type="PTR"/>
+        </hostnames>
+    </host>
+    <host><status state="up" reason="arp-response" reason_ttl="0"/>
+        <address addr="10.0.0.2" addrtype="ipv4"/>
+        <address addr="4C:5E:0C:C6:23:72" addrtype="mac" vendor="Routerboard.com"/>
+        <hostnames>
+        </hostnames>
+        <times srtt="1397" rttvar="5000" to="100000"/>
+    </host>
+    <runstats><finished time="1713542381" timestr="Fri Apr 19 23:59:41 2024" elapsed="1.99" summary="Nmap done at Fri Apr 19 23:59:41 2024; 256 IP addresses (5 hosts up) scanned in 1.99 seconds" exit="success"/><hosts up="5" down="251" total="256"/>
+    </runstats>
+</nmaprun>

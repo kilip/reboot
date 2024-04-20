@@ -15,5 +15,7 @@ use Reboot\Contracts\Entity\NodeInterface;
 
 interface SshFactoryInterface
 {
-    public function create(NodeInterface $node): SshInterface;
+    public function createSshClient(NodeInterface $node): SshInterface;
+
+    public function createSftpClient(NodeInterface $node): SftpInterface;
 }

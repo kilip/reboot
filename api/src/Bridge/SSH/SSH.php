@@ -22,6 +22,11 @@ final class SSH implements SshInterface
     private string $currentCommand = '';
 
     /**
+     * @var array<int,string>
+     */
+    private array $outputs = [];
+
+    /**
      * @param array<int, string> $commands
      */
     public function __construct(
@@ -32,6 +37,7 @@ final class SSH implements SshInterface
         private readonly int $port = 22,
         private readonly int $timeout = 10,
         private array $commands = [],
+        private ?SSH2 $ssh = null
     ) {
     }
 
@@ -48,18 +54,17 @@ final class SSH implements SshInterface
         $this->commands[] = $command;
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function execute(): void
     {
-        $ssh = new SSH2($this->host, $this->port, $this->timeout);
+        $ssh = $this->ssh ?? new SSH2($this->host, $this->port, $this->timeout);
         if (!$ssh->login($this->username, $this->privateKey)) {
             $this->publishOutput(sprintf(
                 'Failed ssh login to host "%s" with username: "%s"',
                 $this->host,
                 $this->username
             ));
+
+            throw SshException::failedToLogin($this->host, $this->username, $this->port);
         }
 
         try {
@@ -69,6 +74,7 @@ final class SSH implements SshInterface
             }
         } catch (\Exception $exception) {
             $this->publishOutput($exception->getMessage());
+            throw SshException::failedToExecuteCommand($this->currentCommand, $exception->getMessage());
         }
 
         $ssh->disconnect();
@@ -88,6 +94,12 @@ final class SSH implements SshInterface
             json_encode($data, JSON_THROW_ON_ERROR),
         );
 
+        $this->outputs[] = trim($output);
         $this->mercureHub->publish($update);
+    }
+
+    public function getOutputs(): array
+    {
+        return $this->outputs;
     }
 }

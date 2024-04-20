@@ -9,23 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Reboot\Messenger\Node;
+namespace Reboot\Messenger\Network;
 
-final readonly class NodeScanCommand
+final readonly class ScanNodesCommand
 {
-    /**
-     * @param array<int,string> $targets
-     */
     public function __construct(
-        private array $targets
+        private string $target,
     ) {
     }
 
-    /**
-     * @return array<int,string>
-     */
-    public function getTargets(): array
+    public function getTarget(): string
     {
-        return $this->targets;
+        return $this->target;
     }
 }

@@ -25,7 +25,7 @@ class WakeOnLanHandler
 
         private readonly SshFactoryInterface $sshFactory,
 
-        #[Autowire('%env(WAKEONLAN_HOST_EXECUTOR)%')]
+        #[Autowire('%env(resolve:SSH_NAVIGATOR)%')]
         private readonly string $executorTarget = 'localhost'
     ) {
     }
@@ -40,7 +40,7 @@ class WakeOnLanHandler
             throw NodeCommandException::wakeOnLanExecutorNotExists($this->executorTarget);
         }
 
-        $ssh = $sshFactory->create($executor);
+        $ssh = $sshFactory->createSshClient($executor);
         $node = $nodeRepository->findById($command->getNodeId());
 
         $ssh->addCommand("wakeonlan {$node->getMacAddress()}");

@@ -101,3 +101,8 @@ tasks:
     cmds:
       - pass reboot/ssh-private-key > api/config/ssh/reboot
       - pass reboot/ssh-public-key > api/config/ssh/reboot.pub
+  
+  ps:
+    desc: show doctrine status
+    cmds:
+      - docker compose ps

@@ -32,7 +32,8 @@ use Symfony\Component\Uid\Uuid;
         new Post(
             security: "is_granted('ROLE_ADMIN')",
         ),
-        new GetCollection(),
+        new GetCollection(
+        ),
         new Get(),
         new Put(
             security: "is_granted('ROLE_ADMIN')",
@@ -61,7 +62,8 @@ use Symfony\Component\Uid\Uuid;
             security: "is_granted('ROLE_ADMIN')",
             name: 'reboot'
         ),
-    ]
+    ],
+    mercure: true
 )]
 #[ORM\Entity]
 class Node implements NodeInterface
@@ -78,11 +80,14 @@ class Node implements NodeInterface
     #[ORM\Column(type: 'string', unique: true)]
     private string $ipAddress;
 
-    #[ORM\Column(type: 'string', length: 20)]
-    private string $macAddress;
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
+    private ?string $macAddress = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $online = false;
+
+    #[ORM\Column(type: 'datetimetz_immutable', nullable: true)]
+    private ?\DateTimeImmutable $uptime = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $sshPrivateKey = null;
@@ -128,12 +133,12 @@ class Node implements NodeInterface
         return $this;
     }
 
-    public function getMacAddress(): string
+    public function getMacAddress(): ?string
     {
         return $this->macAddress;
     }
 
-    public function setMacAddress(string $macAddress): Node
+    public function setMacAddress(?string $macAddress): Node
     {
         $this->macAddress = $macAddress;
 
@@ -208,6 +213,18 @@ class Node implements NodeInterface
     public function setDraft(bool $draft): Node
     {
         $this->draft = $draft;
+
+        return $this;
+    }
+
+    public function getUptime(): ?\DateTimeImmutable
+    {
+        return $this->uptime;
+    }
+
+    public function setUptime(\DateTimeImmutable $uptime = null): NodeInterface
+    {
+        $this->uptime = $uptime;
 
         return $this;
     }

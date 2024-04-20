@@ -7,12 +7,14 @@ services:
       MERCURE_EXTRA_DIRECTIVES: demo
       # See https://xdebug.org/docs/all_settings#mode
       XDEBUG_MODE: "${XDEBUG_MODE:-off}"
+    cap_add:
+      - NET_ADMIN
     volumes:
       - ./api:/app
       - /app/var
       - ./api/frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./api/frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
-      - /app/vendor
+      #- /app/vendor
 
   pwa:
     build:

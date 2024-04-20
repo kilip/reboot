@@ -17,7 +17,15 @@ interface NodeInterface
 {
     public function getId(): ?Uuid;
 
-    public function getMacAddress(): string;
+    public function setHostname(string $hostname): self;
+
+    public function getHostname(): ?string;
+
+    public function setMacAddress(string $macAddress): self;
+
+    public function getMacAddress(): ?string;
+
+    public function setIpAddress(string $ipAddress): self;
 
     public function getIpAddress(): string;
 
@@ -26,4 +34,16 @@ interface NodeInterface
     public function getSshPrivateKey(): ?string;
 
     public function getSshUser(): ?string;
+
+    public function setOnline(bool $status): self;
+
+    public function isOnline(): bool;
+
+    public function setUptime(\DateTimeImmutable $uptime = null): self;
+
+    public function getUptime(): ?\DateTimeImmutable;
+
+    public function setDraft(bool $draft): self;
+
+    public function isDraft(): bool;
 }
