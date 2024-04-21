@@ -28,3 +28,6 @@ services:
       NODE_TLS_REJECT_UNAUTHORIZED: "0"
     volumes:
       - ./pwa:/srv/app
+      - /srv/app/node_modules
+      - /srv/app/.pnpm-store
+      - /srv/app/.next

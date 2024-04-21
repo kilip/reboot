@@ -1,11 +1,12 @@
-import { config } from "@/util/config";
 import { type TokenSet } from "@auth/core/types";
 import NextAuth, { type Session as DefaultSession, type User } from "next-auth";
 import AuthentikProvider from "next-auth/providers/authentik";
+import { config } from "../util/config";
 
 export interface Session extends DefaultSession {
   error?: "RefreshAccessTokenError";
   accessToken: string;
+  refreshToken: string;
   idToken: string;
   user?: User;
 }
@@ -25,8 +26,10 @@ interface Account {
   refresh_token: string;
 }
 
-console.log(config.oidcIssuer);
-export const { handlers: { GET, POST }, auth } = NextAuth({
+export const {
+  handlers: { GET, POST },
+  auth,
+} = NextAuth({
   callbacks: {
     // @ts-ignore
     async jwt({
@@ -50,19 +53,24 @@ export const { handlers: { GET, POST }, auth } = NextAuth({
       }
 
       try {
-        const response = await fetch(`${config.oidcTokenUrl}`, {
+        const url =
+          `${config.oidcTokenUrl}?` +
+          new URLSearchParams({
+            clientId: config.oidcClientId,
+            clientSecret: config.oidcClientSecret,
+            grantType: "refresh_token",
+            refreshToken: token.refreshToken,
+          });
+
+        const response = await fetch(url, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
-          body: new URLSearchParams({
-            clientId: config.oidcClientId,
-            grant_type: "refresh_token",
-            refresh_token: token.refreshToken,
-          }),
           method: "POST",
         });
 
         const tokens: TokenSet = await response.json();
+
         if (!response.ok) throw tokens;
 
         return {
@@ -96,6 +104,7 @@ export const { handlers: { GET, POST }, auth } = NextAuth({
         session.accessToken = token.accessToken;
         session.idToken = token.idToken;
         session.error = token.error;
+        session.refreshToken = token.refreshToken;
       }
 
       return session;

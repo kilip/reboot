@@ -3,12 +3,15 @@ name: Build Images
 on:
   workflow_dispatch:
   workflow_call:
+  push:
+    branches: ["main"]
+    tags: ["v*"]
 
 env:
   IMAGE_PREFIX: ghcr.io/kilip/reboot
   API_DOCKER_IMAGE: ghcr.io/kilip/reboot-api:${{ github.sha }}
   PWA_DOCKER_IMAGE: ghcr.io/kilip/reboot-pwa:${{ github.sha }}
-
+  AUTH_SECRET: YlflHbuMb5LYtRX5Zc7z95YrBHKDtj2PkHH8jEOCLQU=
 jobs:
   build:
     name: Build Container Image
@@ -23,11 +26,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Create .env.local file
-        run: touch .env.local
-
       - name: Build Docker images
         uses: docker/bake-action@v4
+        env:
+          AUTH_SECRET: YlflHbuMb5LYtRX5Zc7z95YrBHKDtj2PkHH8jEOCLQU=
         with:
           pull: true
           load: true
