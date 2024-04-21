@@ -1,17 +1,13 @@
-import { ensureEnv } from "./ensure";
 
 export type Config = {
-  oidcClientId: string,
-  oidcClientSecret: string,
-  oidcIssuer: string,
-  oidcScope: string;
-  oidcTokenUrl: string;
+  authentikClientId: string;
+  authentikClientSecret: string;
+  authentikIssuer: string;
+  authentikTokenUrl: string;
 };
-
 export const config: Config = {
-  oidcClientId: ensureEnv('OIDC_CLIENT_ID'),
-  oidcClientSecret: ensureEnv('OIDC_CLIENT_SECRET'),
-  oidcIssuer: ensureEnv('OIDC_ISSUER'),
-  oidcScope: ensureEnv('OIDC_SCOPE'),
-  oidcTokenUrl: ensureEnv('OIDC_TOKEN_URL'),
+  authentikClientId: process.env.AUTHENTIK_CLIENT_ID || 'changeme',
+  authentikClientSecret: process.env.AUTHENTIK_CLIENT_SECRET || 'secret',
+  authentikIssuer: process.env.AUTHENTIK_ISSUER || 'https://localhost/issuer/url',
+  authentikTokenUrl: process.env.AUTHENTIK_TOKEN_URL || 'https://localhost/token/url'
 };

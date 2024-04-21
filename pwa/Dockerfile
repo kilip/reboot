@@ -2,7 +2,7 @@
 
 
 # Versions
-FROM node:20-alpine AS node_upstream
+FROM node:21-alpine AS node_upstream
 
 
 # Base stage for dev and build
@@ -15,7 +15,7 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /srv/app
 
 RUN corepack enable && \
-	corepack prepare --activate pnpm@9.0.4 && \
+	corepack prepare --activate pnpm@latest && \
 	pnpm config -g set store-dir /.pnpm-store
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -41,6 +41,8 @@ RUN pnpm fetch --prod
 
 COPY --link . .
 
+ARG AUTH_SECRET
+
 RUN	pnpm install --frozen-lockfile --offline --prod && \
 	pnpm run build
 
@@ -53,8 +55,6 @@ WORKDIR /srv/app
 ENV NODE_ENV production
 # Delete the following line in case you want to enable telemetry during runtime.
 ENV NEXT_TELEMETRY_DISABLED 1
-
-ENV AUTH_SECRET YlflHbuMb5LYtRX5Zc7z95YrBHKDtj2PkHH8jEOCLQU=
 
 RUN addgroup --system --gid 1001 nodejs; \
 	adduser --system --uid 1001 nextjs

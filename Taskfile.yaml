@@ -20,6 +20,11 @@ tasks:
     cmds:
       - docker compose -f compose.yaml -f compose.prod.yaml up -d
 
+  up:
+    desc: boot all docker container
+    cmds:
+      - docker compose up -d {{.container}} {{.CLI_ARGS}}
+
   up:*:
     desc: boot docker container
     cmds:

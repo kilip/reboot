@@ -1,22 +1,21 @@
 import type { Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
-import { ReactNode } from "react";
+import "./assets/main.css";
 import { auth } from "./auth";
-import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Reboot",
-  description: "The Homelab Command Center",
+  description: "The Command Center for your Homelab",
 };
 
 export default async function RootLayout({
   children,
-}: {
-  children: ReactNode;
-}) {
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   const session = await auth();
 
   return (
