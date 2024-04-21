@@ -8,15 +8,7 @@ env:
   IMAGE_PREFIX: ghcr.io/kilip/reboot
   API_DOCKER_IMAGE: ghcr.io/kilip/reboot-api:${{ github.sha }}
   PWA_DOCKER_IMAGE: ghcr.io/kilip/reboot-pwa:${{ github.sha }}
-  AUTH_URL: https://localhost
-  AUTH_SECRET: changeme
-  OIDC_ISSUER: https://localhost/change/me
-  OIDC_SCOPE: change me
-  OIDC_LOGOUT_URL: https://localhost/change/me
-  OIDC_CLIENT_ID: changeme
-  OIDC_CLIENT_SECRET: changeme
-  OIDC_TOKEN_URL: changeme
-
+  AUTH_SECRET: YlflHbuMb5LYtRX5Zc7z95YrBHKDtj2PkHH8jEOCLQU=
 jobs:
   build:
     name: Build Container Image
