@@ -1,4 +1,4 @@
-import LoginButton from "@/auth/components/LoginButton";
+import LoginButton from "../auth/components/LoginButton";
 
 export default function Home() {
   return (
@@ -6,7 +6,6 @@ export default function Home() {
       <div className="flex flex-col">
         <h1 className="text-3xl block">Welcome to Reboot!</h1>
         <h2 className="text-lg block">The Command Center for your Homelab</h2>
-
         <LoginButton />
       </div>
     </main>
