@@ -53,6 +53,7 @@ export const {
       } else {
         // If the access token has expired, try to refresh it
         try {
+          console.log(token.refreshToken);
           const response = await fetch(`${config.authentikTokenUrl}`, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({

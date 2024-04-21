@@ -23,26 +23,42 @@ tasks:
   up:
     desc: boot all docker container
     cmds:
-      - docker compose up -d {{.container}} {{.CLI_ARGS}}
+      - docker compose up -d {{.CLI_ARGS}}
 
   up:*:
     desc: boot docker container
     cmds:
-      - docker compose up -d {{.container}} {{.CLI_ARGS}}
+      - task: up
+        vars:
+          CLI_ARGS: "{{.container}} {{.CLI_ARGS}}"
     vars:
       container: "{{index .MATCH 0}}"
+
+  start:
+    desc: start docker container
+    cmds:
+      - docker compose start {{.CLI_ARGS}}
 
   start:*:
     desc: start docker container
     cmds:
-      - docker compose up -d {{.CLI_ARGS}}
+      - task: start
+        vars:
+          CLI_ARGS: "{{.container}} {{.CLI_ARGS}}"
     vars:
       container: "{{index .MATCH 0}}"
+
+  stop:
+    desc: stop docker container
+    cmds:
+      - docker compose stop {{.CLI_ARGS}}
 
   stop:*:
     desc: stop docker container
     cmds:
-      - docker compose stop {{.CLI_ARGS}}
+      - task: stop
+        vars:
+          CLI_ARGS: "{{.container}} {{.CLI_ARGS}}"
     vars:
       container: "{{index .MATCH 0}}"
 
