@@ -1,7 +1,7 @@
-import { config } from "@/util/config";
 import { type TokenSet } from "@auth/core/types";
 import NextAuth, { type Session as DefaultSession, type User } from "next-auth";
 import AuthentikProvider from "next-auth/providers/authentik";
+import { config } from "../util/config";
 
 export interface Session extends DefaultSession {
   error?: "RefreshAccessTokenError";

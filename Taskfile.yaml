@@ -4,67 +4,76 @@ version: "3"
 tasks:
   default: task -l
 
+  secrets:
+    desc: generate random secrets
+    cmds:
+      - openssl rand -base64 -hex 32
+
+  pass:init:
+    desc: generate secrets from password store
+    cmds:
+      - pass reboot/ssh-private-key > api/config/ssh/reboot
+      - pass reboot/ssh-public-key > api/config/ssh/reboot.pub
+
   boot:prod:
     desc: boot docker container
     cmds:
       - docker compose -f compose.yaml -f compose.prod.yaml up -d
 
-  up:
+  up:*:
     desc: boot docker container
     cmds:
-      - docker compose up -d {{.CLI_ARGS}}
+      - docker compose up -d {{.container}} {{.CLI_ARGS}}
+    vars:
+      container: "{{index .MATCH 0}}"
 
-  start:
+  start:*:
     desc: start docker container
     cmds:
       - docker compose up -d {{.CLI_ARGS}}
+    vars:
+      container: "{{index .MATCH 0}}"
 
-  stop:
+  stop:*:
     desc: stop docker container
     cmds:
       - docker compose stop {{.CLI_ARGS}}
+    vars:
+      container: "{{index .MATCH 0}}"
 
   restart:
     desc: restart docker container
     cmds:
-      - task: stop
-      - task: start
+      - task: stop:{{.container}}
+      - task: start:{{.container}}
+    vars:
+      container: "{{index .MATCH 0}}"
 
-  rm:
-    desc: cleanup containers
+  rm:*:
+    desc: remove container
     cmds:
-      - docker compose rm {{.CLI_ARGS}}
-
-  build:
-    desc: build dev container
-    cmds:
-      - task: build:php
-      - task: build:pwa
-
-  build:pwa:
-    desc: Build pwa container image
-    cmds:
-      - docker compose build pwa {{.CLI_ARGS}}
-
-  build:php:
-    desc: Build php container image
-    cmds:
-      - docker compose build api {{.CLI_ARGS}}
+      - docker compose rm {{.container}} {{.CLI_ARGS}}
+    vars:
+      container: "{{index .MATCH 0}}"
 
   build:prod:
     desc: Build production images
     cmds:
       - docker compose -f compose.yaml -f compose.prod.yaml build {{.CLI_ARGS}}
 
-  logs:api:
+  build:*:
+    desc: build dev container
+    cmds:
+      - docker compose build {{.container}}
+    vars:
+      container: "{{index .MATCH 0}}"
+
+  logs:*:
     desc: show api container log
     cmds:
-      - docker compose logs -f api --tail 10
-
-  logs:pwa:
-    desc: show pwa container log
-    cmds:
-      - docker compose logs -f pwa --tail 10
+      - docker compose logs -f {{.container}} --tail 10
+    vars:
+      container: "{{index .MATCH 0}}"
 
   api:shell:
     desc: execute bash shell in api container
@@ -91,17 +100,6 @@ tasks:
     cmds:
       - docker compose exec pwa pnpm {{.CLI_ARGS}}
 
-  secrets:
-    desc: generate random secrets
-    cmds:
-      - openssl rand -base64 -hex 32
-
-  pass:init:
-    desc: generate secrets from password store
-    cmds:
-      - pass reboot/ssh-private-key > api/config/ssh/reboot
-      - pass reboot/ssh-public-key > api/config/ssh/reboot.pub
-  
   ps:
     desc: show doctrine status
     cmds:
