@@ -9,6 +9,7 @@ services:
       XDEBUG_MODE: "${XDEBUG_MODE:-off}"
     cap_add:
       - NET_ADMIN
+    user: "0:0"
     volumes:
       - ./api:/app
       - /app/var

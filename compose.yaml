@@ -11,6 +11,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    cap_add:
+      - NET_ADMIN
     ports:
       # HTTP
       - target: 80
@@ -31,7 +33,7 @@ services:
     build:
       context: ./pwa
     environment:
-      NEXT_PUBLIC_ENTRYPOINT: http://php
+      NEXT_PUBLIC_ENTRYPOINT: http://api
       AUTH_SECRET: ${AUTH_SECRET:-!ChangeThisNextAuthSecret!}
       AUTH_URL: ${AUTH_URL:-https://localhost/api/auth}
       OIDC_CLIENT_ID: ${OIDC_CLIENT_ID:-api-platform-pwa}

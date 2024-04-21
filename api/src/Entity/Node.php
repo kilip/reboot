@@ -11,6 +11,9 @@
 
 namespace Reboot\Entity;
 
+use ApiPlatform\Doctrine\Common\Filter\SearchFilterInterface;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
@@ -74,6 +77,7 @@ class Node implements NodeInterface
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     private ?Uuid $id = null;
 
+    #[ApiFilter(SearchFilter::class, strategy: SearchFilterInterface::STRATEGY_PARTIAL)]
     #[ORM\Column(type: 'string', unique: true)]
     private string $hostname;
 
@@ -83,6 +87,7 @@ class Node implements NodeInterface
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private ?string $macAddress = null;
 
+    #[ApiFilter(SearchFilter::class, strategy: SearchFilterInterface::STRATEGY_EXACT)]
     #[ORM\Column(type: 'boolean')]
     private bool $online = false;
 
@@ -101,6 +106,7 @@ class Node implements NodeInterface
     #[ORM\Column(type: 'integer', enumType: NodeTypeEnum::class)]
     private NodeTypeEnum $type = NodeTypeEnum::Unknown;
 
+    #[ApiFilter(SearchFilter::class, strategy: SearchFilterInterface::STRATEGY_EXACT)]
     #[ORM\Column(type: 'boolean')]
     private bool $draft = false;
 
