@@ -1,5 +1,5 @@
 ---
-services:  
+services:
   api:
     image: ${API_DOCKER_IMAGE}
     build:
@@ -13,3 +13,7 @@ services:
     build:
       context: ./pwa
       target: prod
+      args:
+        AUTH_SECRET: ${AUTH_SECRET}
+    environment:
+      AUTH_SECRET: ${AUTH_SECRET}
