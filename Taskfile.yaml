@@ -70,10 +70,16 @@ tasks:
     vars:
       container: "{{index .MATCH 0}}"
 
-  rm:*:
+  rm:
     desc: remove container
     cmds:
       - docker compose rm {{.container}} {{.CLI_ARGS}}
+
+  rm:*:
+    desc: remove container
+    cmds:
+      - task: rm
+        CLI_ARGS: "{{.container}} {{.CLI_ARGS}}"
     vars:
       container: "{{index .MATCH 0}}"
 

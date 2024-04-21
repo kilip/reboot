@@ -11,6 +11,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    cap_add:
+      - NET_ADMIN
     ports:
       # HTTP
       - target: 80
