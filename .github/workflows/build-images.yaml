@@ -31,11 +31,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Create .env.local file
-        run: touch .env.local
-
       - name: Build Docker images
         uses: docker/bake-action@v4
+        env:
+          AUTH_SECRET: YlflHbuMb5LYtRX5Zc7z95YrBHKDtj2PkHH8jEOCLQU=
         with:
           pull: true
           load: true
