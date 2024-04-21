@@ -3,6 +3,9 @@ name: Build Images
 on:
   workflow_dispatch:
   workflow_call:
+  push:
+    branches: ["main"]
+    tags: ["v*"]
 
 env:
   IMAGE_PREFIX: ghcr.io/kilip/reboot

@@ -1,14 +1,13 @@
 ---
 name: "Release"
-  
+
 on:
   workflow_dispatch:
   workflow_call:
-  #push:
-  #  tags:
-  #    - v[0-9]+.[0-9]+.[0-9]+
+  push:
+    tags: ["v*"]
 
-jobs:  
+jobs:
   release:
     name: Version ${{ github.ref_name }}
     runs-on: ubuntu-latest
