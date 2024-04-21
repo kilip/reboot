@@ -53,20 +53,19 @@ export const {
       }
 
       try {
-        const url =
-          `${config.oidcTokenUrl}?` +
-          new URLSearchParams({
-            clientId: config.oidcClientId,
-            clientSecret: config.oidcClientSecret,
-            grantType: "refresh_token",
-            refreshToken: token.refreshToken,
-          });
-
-        const response = await fetch(url, {
+        const payload = new URLSearchParams({
+          client_id: config.oidcClientId,
+          client_secret: config.oidcClientSecret,
+          grant_type: "refresh_token",
+          refresh_token: token.refreshToken,
+        });
+        console.log(payload);
+        const response = await fetch(config.oidcTokenUrl, {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
           method: "POST",
+          body: payload,
         });
 
         const tokens: TokenSet = await response.json();

@@ -1,6 +1,8 @@
 "use client";
 
+import LoginButton from "@/auth/components/LoginButton";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -25,10 +27,9 @@ export default function Home() {
           <span>{status}</span>
         </div>
 
-        <div className="flex-row">
-          <button onClick={handleLogin}>Login</button>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
+        <LoginButton />
+
+        <Link href="/node">Node Lists</Link>
       </div>
     </main>
   );
