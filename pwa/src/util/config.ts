@@ -1,13 +1,13 @@
 
 export type Config = {
-  oidcClientId: string;
-  oidcClientSecret: string;
-  oidcIssuer: string;
-  oidcTokenUrl: string;
+  authentikClientId: string;
+  authentikClientSecret: string;
+  authentikIssuer: string;
+  authentikTokenUrl: string;
 };
 export const config: Config = {
-  oidcClientId: process.env.OIDC_CLIENT_ID || 'changeme',
-  oidcClientSecret: process.env.OIDC_CLIENT_SECRET || 'secret',
-  oidcIssuer: process.env.OIDC_ISSUER || 'https://localhost/issuer/url',
-  oidcTokenUrl: process.env.OIDC_TOKEN_URL || 'https://localhost/token/url'
+  authentikClientId: process.env.AUTHENTIK_CLIENT_ID || 'changeme',
+  authentikClientSecret: process.env.AUTHENTIK_CLIENT_SECRET || 'secret',
+  authentikIssuer: process.env.AUTHENTIK_ISSUER || 'https://localhost/issuer/url',
+  authentikTokenUrl: process.env.AUTHENTIK_TOKEN_URL || 'https://localhost/token/url'
 };

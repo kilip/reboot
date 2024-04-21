@@ -53,11 +53,11 @@ export const {
       } else {
         // If the access token has expired, try to refresh it
         try {
-          const response = await fetch(`${config.oidcTokenUrl}`, {
+          const response = await fetch(`${config.authentikTokenUrl}`, {
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({
-              client_id: config.oidcClientId,
-              client_secret: config.oidcClientSecret,
+              client_id: config.authentikClientId,
+              client_secret: config.authentikClientSecret,
               grant_type: "refresh_token",
               refresh_token: token.refreshToken,
             }),
@@ -110,9 +110,9 @@ export const {
   },
   providers: [
     Authentik({
-      clientId: config.oidcClientId,
-      clientSecret: config.oidcClientSecret,
-      issuer: config.oidcIssuer,
+      clientId: config.authentikClientId,
+      clientSecret: config.authentikClientSecret,
+      issuer: config.authentikIssuer,
       authorization: {
         scope: "openid email profile offline_access",
       },
