@@ -114,7 +114,9 @@ export const {
       clientSecret: config.authentikClientSecret,
       issuer: config.authentikIssuer,
       authorization: {
-        scope: "openid email profile offline_access",
+        params: {
+          scope: "openid email profile offline_access",
+        },
       },
     }),
   ],

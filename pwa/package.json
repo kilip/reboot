@@ -10,10 +10,16 @@
   },
   "dependencies": {
     "@auth/core": "^0.30.0",
+    "@tanstack/react-query": "^5.29.2",
+    "@tanstack/react-query-devtools": "^5.29.2",
+    "@tanstack/react-query-next-experimental": "^5.29.2",
+    "cssclass": "^1.1.0",
     "next": "14.2.2",
     "next-auth": "5.0.0-beta.16",
+    "postcss": "^8.4.38",
     "react": "^18",
     "react-dom": "^18",
+    "sharp": "^0.33.3",
     "tailwindcss": "^3.4.3"
   },
   "devDependencies": {
@@ -22,7 +28,6 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.2",
-    "postcss": "^8",
     "typescript": "^5"
   }
 }

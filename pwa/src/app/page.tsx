@@ -1,3 +1,5 @@
+"use client";
+
 import LoginButton from "../auth/components/LoginButton";
 
 export default function Home() {
